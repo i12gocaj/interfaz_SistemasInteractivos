@@ -39,7 +39,7 @@ public class LoginRegisterFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Establecemos el tamaño de la ventana a 320x480 píxeles
-        setSize(320, 480);
+        setSize(320, 500);
 
         // Configuramos el color de fondo de la ventana usando el valor hexadecimal
         Color backgroundColor = Color.decode("#E8FAFF");
@@ -51,7 +51,7 @@ public class LoginRegisterFrame extends JFrame {
         GridBagConstraints gbc = new GridBagConstraints();
 
         // Cargamos la imagen del icono y la redimensionamos
-        ImageIcon icon = resizeImage("/Users/nodo/Desktop/Sistemas Interactivos/interfaz/proyecto/iconos/auth.png", 60, 60);
+        ImageIcon icon = resizeImage("/Users/nodo/Desktop/Sistemas Interactivos/proyecto/interfaz/iconos/auth.png", 60, 60);
         JLabel iconLabel = new JLabel(icon);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridx = 0;
@@ -62,8 +62,8 @@ public class LoginRegisterFrame extends JFrame {
         panel.add(iconLabel, gbc);
 
         // Creamos e inicializamos los botones con imágenes redimensionadas
-        RoundedButton btnLogin = new RoundedButton(resizeImage("/Users/nodo/Desktop/Sistemas Interactivos/interfaz/proyecto/iconos/login.png", 120, 60));
-        RoundedButton btnRegister = new RoundedButton(resizeImage("/Users/nodo/Desktop/Sistemas Interactivos/interfaz/proyecto/iconos/register.png", 120, 60));
+        RoundedButton btnLogin = new RoundedButton(resizeImage("/Users/nodo/Desktop/Sistemas Interactivos/proyecto/interfaz/iconos/login.png", 120, 60));
+        RoundedButton btnRegister = new RoundedButton(resizeImage("/Users/nodo/Desktop/Sistemas Interactivos/proyecto/interfaz/iconos/register.png", 120, 60));
 
         // Posicionamos el botón de inicio de sesión debajo del icono
         gbc.gridy = 1;
