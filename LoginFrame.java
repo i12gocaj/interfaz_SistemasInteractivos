@@ -136,7 +136,7 @@ public class LoginFrame extends JFrame {
                     // Verificar si se ingresaron los textos predeterminados
                     if (email.equals("hola") && password.equals("hola")) {
                         dispose(); // Cerrar el marco de inicio de sesión
-                        new LoginRegisterFrame(); // Abrir la nueva pantalla
+                        new HomeFrame(); // Abrir la nueva pantalla
                     } else {
                         errorMessageLabel.setText("Error auth..."); // Restaurar el mensaje de error
                         errorMessageLabel.setVisible(true); // Mostrar el mensaje de error
