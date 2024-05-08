@@ -4,6 +4,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 // Clase para botones redondeados
 class RoundedButton extends JButton {
@@ -64,6 +66,25 @@ public class LoginRegisterFrame extends JFrame {
         // Creamos e inicializamos los botones con imágenes redimensionadas
         RoundedButton btnLogin = new RoundedButton(resizeImage("/Users/nodo/Desktop/Sistemas Interactivos/proyecto/interfaz/iconos/login.png", 120, 60));
         RoundedButton btnRegister = new RoundedButton(resizeImage("/Users/nodo/Desktop/Sistemas Interactivos/proyecto/interfaz/iconos/register.png", 120, 60));
+
+        // Añadimos action listener para cambiar a las otras paginas
+
+        btnLogin.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                //new new LoginPage(); Cambiar por nombre de la otra clase
+            }
+        });
+
+        btnRegister.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                //new RegisterPage(); Cambiar por nombre de la otra clase
+            }
+        });
+
 
         // Posicionamos el botón de inicio de sesión debajo del icono
         gbc.gridy = 1;
