@@ -54,6 +54,18 @@ public class LoginFrame extends JFrame {
         gbc.insets = new Insets(10, 0, 10, 0);
         panel.add(iconLabel, gbc);
 
+        // Crear un JLabel para el mensaje de error
+        JLabel errorMessageLabel = new JLabel("Error auth...");
+        errorMessageLabel.setForeground(Color.RED);
+        errorMessageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        errorMessageLabel.setFont(new Font("Arial", Font.BOLD, 12));
+        gbc.gridy = 4;
+        gbc.insets = new Insets(5, 0, 20, 0);
+        panel.add(errorMessageLabel, gbc);
+        errorMessageLabel.setVisible(false);
+
+
+
         Border boldBorder = BorderFactory.createLineBorder(Color.BLACK, 1);
 
         JTextField emailField = new JTextField("email");
@@ -109,14 +121,30 @@ public class LoginFrame extends JFrame {
         // Create a rounded image label for login
         RoundedButton btnLoginBottom = new RoundedButton(resizeImage("/Users/nodo/Desktop/Sistemas Interactivos/proyecto/interfaz/iconos/LoginBottom.png", 120, 60));
 
-         // Añadimos action listener para cambiar a las otras paginas
+        // Añadimos action listener para cambiar a las otras páginas o mostrar un mensaje de error
         btnLoginBottom.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                dispose();
-                new HomeFrame();
+                String email = emailField.getText();
+                String password = passwordField.getText();
+                
+                // Verificar si algún campo está vacío
+                if (email.isEmpty() || password.isEmpty()) {
+                    errorMessageLabel.setVisible(true); // Mostrar el mensaje de error
+                } // Mostrar el mensaje de error  
+                else {
+                    // Verificar si se ingresaron los textos predeterminados
+                    if (email.equals("hola") && password.equals("hola")) {
+                        dispose(); // Cerrar el marco de inicio de sesión
+                        new LoginRegisterFrame(); // Abrir la nueva pantalla
+                    } else {
+                        errorMessageLabel.setText("Error auth..."); // Restaurar el mensaje de error
+                        errorMessageLabel.setVisible(true); // Mostrar el mensaje de error
+                    }
+                }
             }
         });
+
 
         gbc.gridy = 3;
         gbc.gridwidth = 1;
