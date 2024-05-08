@@ -73,7 +73,7 @@ public class LoginRegisterFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                //new new LoginPage(); Cambiar por nombre de la otra clase
+                new LoginFrame();
             }
         });
 
