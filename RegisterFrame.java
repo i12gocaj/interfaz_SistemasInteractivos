@@ -31,10 +31,10 @@ class RoundedButton extends JButton {
     }
 }
 
-public class LoginFrame extends JFrame {
+public class RegisterFrame extends JFrame {
 
-    public LoginFrame() {
-        super("Login Interface");
+    public RegisterFrame() {
+        super("Register Interface");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(320, 500);
         Color backgroundColor = Color.decode("#E8FAFF");
@@ -55,16 +55,14 @@ public class LoginFrame extends JFrame {
         panel.add(iconLabel, gbc);
 
         // Crear un JLabel para el mensaje de error
-        JLabel errorMessageLabel = new JLabel("Error auth...");
+        JLabel errorMessageLabel = new JLabel("Error password...");
         errorMessageLabel.setForeground(Color.RED);
         errorMessageLabel.setHorizontalAlignment(SwingConstants.CENTER);
         errorMessageLabel.setFont(new Font("Arial", Font.BOLD, 12));
-        gbc.gridy = 4;
+        gbc.gridy = 5;
         gbc.insets = new Insets(5, 0, 20, 0);
         panel.add(errorMessageLabel, gbc);
         errorMessageLabel.setVisible(false);
-
-
 
         Border boldBorder = BorderFactory.createLineBorder(Color.BLACK, 1);
 
@@ -89,19 +87,21 @@ public class LoginFrame extends JFrame {
             }
         });
 
-        JTextField passwordField = new JPasswordField("password");
+        JPasswordField passwordField = new JPasswordField("password");
         passwordField.setForeground(Color.GRAY);
         passwordField.setHorizontalAlignment(JTextField.CENTER);
         passwordField.setFont(new Font("Arial", Font.PLAIN, 12));
         passwordField.setPreferredSize(new Dimension(180, 30));
         passwordField.setBorder(boldBorder);
         passwordField.addFocusListener(new java.awt.event.FocusAdapter() {
+            @SuppressWarnings("deprecation")
             public void focusGained(java.awt.event.FocusEvent evt) {
                 if (passwordField.getText().equals("password")) {
                     passwordField.setText("");
                     passwordField.setForeground(Color.BLACK);
                 }
             }
+            @SuppressWarnings("deprecation")
             public void focusLost(java.awt.event.FocusEvent evt) {
                 if (passwordField.getText().isEmpty()) {
                     passwordField.setForeground(Color.GRAY);
@@ -110,46 +110,69 @@ public class LoginFrame extends JFrame {
             }
         });
 
-        gbc.gridy = 1;
-        gbc.insets = new Insets(20, 0, 20, 0);
-        panel.add(emailField, gbc);
-
-        gbc.gridy = 2;
-        gbc.insets = new Insets(5, 0, 5, 0);
-        panel.add(passwordField, gbc);
-
-        // Create a rounded image label for login
-        RoundedButton btnLoginBottom = new RoundedButton(resizeImage("/Users/nodo/Desktop/Sistemas Interactivos/proyecto/interfaz/iconos/LoginBottom.png", 120, 60));
-
-        // Añadimos action listener para cambiar a las otras páginas o mostrar un mensaje de error
-        btnLoginBottom.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String email = emailField.getText();
-                String password = passwordField.getText();
-                
-                // Verificar si algún campo está vacío
-                if (email.isEmpty() || password.isEmpty()) {
-                    errorMessageLabel.setVisible(true); // Mostrar el mensaje de error
-                } // Mostrar el mensaje de error  
-                else {
-                    // Verificar si se ingresaron los textos predeterminados
-                    if (email.equals("hola") && password.equals("hola")) {
-                        dispose(); // Cerrar el marco de inicio de sesión
-                        new HomeFrame(); // Abrir la nueva pantalla
-                    } else {
-                       
-                        errorMessageLabel.setVisible(true); // Mostrar el mensaje de error
-                    }
+        JPasswordField confirmPasswordField = new JPasswordField("confirm password");
+        confirmPasswordField.setForeground(Color.GRAY);
+        confirmPasswordField.setHorizontalAlignment(JTextField.CENTER);
+        confirmPasswordField.setFont(new Font("Arial", Font.PLAIN, 12));
+        confirmPasswordField.setPreferredSize(new Dimension(180, 30));
+        confirmPasswordField.setBorder(boldBorder);
+        confirmPasswordField.addFocusListener(new java.awt.event.FocusAdapter() {
+            @SuppressWarnings("deprecation")
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                if (confirmPasswordField.getText().equals("confirm password")) {
+                    confirmPasswordField.setText("");
+                    confirmPasswordField.setForeground(Color.BLACK);
+                }
+            }
+            @SuppressWarnings("deprecation")
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                if (confirmPasswordField.getText().isEmpty()) {
+                    confirmPasswordField.setForeground(Color.GRAY);
+                    confirmPasswordField.setText("confirm password");
                 }
             }
         });
 
+        gbc.gridy = 1;
+        gbc.insets = new Insets(20, 0, 5, 0);
+        panel.add(emailField, gbc);
+
+        gbc.gridy = 2;
+        gbc.insets = new Insets(20, 0, 5, 0);
+        panel.add(passwordField, gbc);
 
         gbc.gridy = 3;
-        gbc.gridwidth = 1;
-        gbc.insets = new Insets(5, 0, 20, 0);
-        panel.add(btnLoginBottom, gbc);
+        gbc.insets = new Insets(10, 0, 5, 0);
+        panel.add(confirmPasswordField, gbc);
+
+        // Create a rounded image label for register
+        RoundedButton btnRegisterBottom = new RoundedButton(resizeImage("/Users/nodo/Desktop/Sistemas Interactivos/proyecto/interfaz/iconos/registerBottom.png", 120, 60));
+        gbc.gridy = 4;
+        panel.add(btnRegisterBottom, gbc);
+
+        // Añadimos action listener para cambiar a las otras páginas o mostrar un mensaje de error
+        btnRegisterBottom.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String email = emailField.getText();
+                String password = new String(passwordField.getPassword());
+                String confirmPassword = new String(confirmPasswordField.getPassword());
+
+                // Verificar si algún campo está vacío o las contraseñas no coinciden
+                if (email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+                   
+                    errorMessageLabel.setVisible(true);
+                } else if (!password.equals(confirmPassword)) {
+                    
+                    errorMessageLabel.setVisible(true);
+                } else {
+                    // Passwords match and all fields are filled
+                    errorMessageLabel.setVisible(false);
+                    dispose(); // Cerrar el marco de inicio de sesión
+                    new HomeFrame(); // Abrir la nueva pantalla
+                }
+            }
+        });
 
         add(panel);
         setResizable(false);
@@ -172,7 +195,7 @@ public class LoginFrame extends JFrame {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new LoginFrame();
+                new RegisterFrame();
             }
         });
     }
