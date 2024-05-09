@@ -44,7 +44,7 @@ public class LoginFrame extends JFrame {
         panel.setBackground(backgroundColor);
         GridBagConstraints gbc = new GridBagConstraints();
 
-        ImageIcon icon = resizeImage("/Users/nodo/Desktop/Sistemas Interactivos/proyecto/interfaz/iconos/auth.png", 60, 60);
+        ImageIcon icon = resizeImage("/Users/nodo/Desktop/Sistemas Interactivos/proyecto/interfaz/iconos/logo.png", 60, 60);
         JLabel iconLabel = new JLabel(icon);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridx = 0;
