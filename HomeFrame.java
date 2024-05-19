@@ -4,6 +4,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class HomeFrame extends JFrame {
 
@@ -14,13 +16,29 @@ public class HomeFrame extends JFrame {
         setLayout(new BorderLayout());  // Usar BorderLayout para una distribución más flexible
 
         JPanel topPanel = new JPanel();
-        topPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        topPanel.setLayout(new BorderLayout());
         topPanel.setBackground(Color.decode("#E8FAFF"));
         
         // Cargar y añadir el icono en la esquina superior izquierda
-        ImageIcon icon = resizeImage("/Users/nodo/Desktop/Sistemas Interactivos/proyecto/interfaz/iconos/logo.png", 60, 60);
+        ImageIcon icon = resizeImage("iconos/logo.png", 60, 60);
         JLabel iconLabel = new JLabel(icon);
-        topPanel.add(iconLabel);
+        topPanel.add(iconLabel, BorderLayout.WEST);
+
+        ImageIcon configure = resizeImage("iconos/configureIcon.png", 30, 30);
+        JButton configureButton = new JButton(configure);
+        configureButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            dispose();
+            new SettingsFrame();
+            }
+        });
+        configureButton.setOpaque(false);
+        configureButton.setContentAreaFilled(false);
+        configureButton.setBorderPainted(false);
+        configureButton.setFocusPainted(false);
+        configureButton.setBorder(null);
+        topPanel.add(configureButton, BorderLayout.EAST);
 
         // Preparar el panel principal para futuros elementos
         JPanel mainPanel = new JPanel(new GridBagLayout());
@@ -34,29 +52,53 @@ public class HomeFrame extends JFrame {
         gbc.ipady = 40;  // Altura interna para hacer que los botones sean más altos
 
         // Crear botones con la imagen del rectángulo y el símbolo "+"
-        ImageIcon rectangleIcon = resizeImage("/Users/nodo/Desktop/Sistemas Interactivos/proyecto/interfaz/iconos/rectangle.png", 100, 100);
+        ImageIcon rectangleIcon = resizeImage("iconos/rectangle.png", 100, 100);
         
         // Botón 1
         JButton button1 = new JButton("+", rectangleIcon);
         configureButton(button1);
+        button1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Botón 1 pulsado");
+            }
+        });
         gbc.gridx = 0; gbc.gridy = 0;
         mainPanel.add(button1, gbc);
 
         // Botón 2
         JButton button2 = new JButton("+", rectangleIcon);
         configureButton(button2);
+        button2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Botón 1 pulsado");
+            }
+        });
         gbc.gridx = 1; gbc.gridy = 0;
         mainPanel.add(button2, gbc);
 
         // Botón 3
         JButton button3 = new JButton("+", rectangleIcon);
         configureButton(button3);
+        button3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Botón 1 pulsado");
+            }
+        });
         gbc.gridx = 0; gbc.gridy = 1;
         mainPanel.add(button3, gbc);
 
         // Botón 4
         JButton button4 = new JButton("+", rectangleIcon);
         configureButton(button4);
+        button4.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Botón 1 pulsado");
+            }
+        });
         gbc.gridx = 1; gbc.gridy = 1;
         mainPanel.add(button4, gbc);
 
