@@ -3,6 +3,9 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 import javax.imageio.ImageIO;
 import javax.swing.border.Border;
 import java.awt.event.ActionEvent;
@@ -34,17 +37,22 @@ class RoundedButton extends JButton {
 public class RegisterFrame extends JFrame {
 
     public RegisterFrame() {
-        super("Register Interface");
+        super("");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(320, 500);
         Color backgroundColor = Color.decode("#E8FAFF");
         getContentPane().setBackground(backgroundColor);
 
+        Locale currentLocale = new Locale.Builder().setLanguage("en").setRegion("GB").build();
+        ResourceBundle bundle_text = ResourceBundle.getBundle("Bundle", currentLocale);
+
+        this.setTitle(bundle_text.getString("Titulo_Register"));
+
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBackground(backgroundColor);
         GridBagConstraints gbc = new GridBagConstraints();
 
-        ImageIcon icon = resizeImage("/Users/nodo/Desktop/Sistemas Interactivos/proyecto/interfaz/iconos/logo.png", 60, 60);
+        ImageIcon icon = resizeImage("interfaz/iconos/logo.png", 60, 60);
         JLabel iconLabel = new JLabel(icon);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridx = 0;
@@ -55,7 +63,7 @@ public class RegisterFrame extends JFrame {
         panel.add(iconLabel, gbc);
 
         // Crear un JLabel para el mensaje de error
-        JLabel errorMessageLabel = new JLabel("Error password...");
+        JLabel errorMessageLabel = new JLabel(bundle_text.getString("Wrong_Username_Password"));
         errorMessageLabel.setForeground(Color.RED);
         errorMessageLabel.setHorizontalAlignment(SwingConstants.CENTER);
         errorMessageLabel.setFont(new Font("Arial", Font.BOLD, 12));
@@ -66,7 +74,7 @@ public class RegisterFrame extends JFrame {
 
         Border boldBorder = BorderFactory.createLineBorder(Color.BLACK, 1);
 
-        JTextField emailField = new JTextField("email");
+        JTextField emailField = new JTextField(bundle_text.getString("Email"));
         emailField.setForeground(Color.GRAY);
         emailField.setHorizontalAlignment(JTextField.CENTER);
         emailField.setFont(new Font("Arial", Font.PLAIN, 12));
@@ -74,7 +82,7 @@ public class RegisterFrame extends JFrame {
         emailField.setBorder(boldBorder);
         emailField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
-                if (emailField.getText().equals("email")) {
+                if (emailField.getText().equals(bundle_text.getString("Email"))) {
                     emailField.setText("");
                     emailField.setForeground(Color.BLACK);
                 }
@@ -82,12 +90,12 @@ public class RegisterFrame extends JFrame {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 if (emailField.getText().isEmpty()) {
                     emailField.setForeground(Color.GRAY);
-                    emailField.setText("email");
+                    emailField.setText(bundle_text.getString("Email"));
                 }
             }
         });
 
-        JPasswordField passwordField = new JPasswordField("password");
+        JPasswordField passwordField = new JPasswordField(bundle_text.getString("Password"));
         passwordField.setForeground(Color.GRAY);
         passwordField.setHorizontalAlignment(JTextField.CENTER);
         passwordField.setFont(new Font("Arial", Font.PLAIN, 12));
@@ -96,7 +104,7 @@ public class RegisterFrame extends JFrame {
         passwordField.addFocusListener(new java.awt.event.FocusAdapter() {
             @SuppressWarnings("deprecation")
             public void focusGained(java.awt.event.FocusEvent evt) {
-                if (passwordField.getText().equals("password")) {
+                if (passwordField.getText().equals(bundle_text.getString("Password"))) {
                     passwordField.setText("");
                     passwordField.setForeground(Color.BLACK);
                 }
@@ -105,12 +113,12 @@ public class RegisterFrame extends JFrame {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 if (passwordField.getText().isEmpty()) {
                     passwordField.setForeground(Color.GRAY);
-                    passwordField.setText("password");
+                    passwordField.setText(bundle_text.getString("Password"));
                 }
             }
         });
 
-        JPasswordField confirmPasswordField = new JPasswordField("confirm password");
+        JPasswordField confirmPasswordField = new JPasswordField(bundle_text.getString("Confirm_Password"));
         confirmPasswordField.setForeground(Color.GRAY);
         confirmPasswordField.setHorizontalAlignment(JTextField.CENTER);
         confirmPasswordField.setFont(new Font("Arial", Font.PLAIN, 12));
@@ -119,7 +127,7 @@ public class RegisterFrame extends JFrame {
         confirmPasswordField.addFocusListener(new java.awt.event.FocusAdapter() {
             @SuppressWarnings("deprecation")
             public void focusGained(java.awt.event.FocusEvent evt) {
-                if (confirmPasswordField.getText().equals("confirm password")) {
+                if (confirmPasswordField.getText().equals(bundle_text.getString("Confirm_Password"))) {
                     confirmPasswordField.setText("");
                     confirmPasswordField.setForeground(Color.BLACK);
                 }
@@ -128,7 +136,7 @@ public class RegisterFrame extends JFrame {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 if (confirmPasswordField.getText().isEmpty()) {
                     confirmPasswordField.setForeground(Color.GRAY);
-                    confirmPasswordField.setText("confirm password");
+                    confirmPasswordField.setText(bundle_text.getString("Confirm_Password"));
                 }
             }
         });
@@ -146,7 +154,7 @@ public class RegisterFrame extends JFrame {
         panel.add(confirmPasswordField, gbc);
 
         // Create a rounded image label for register
-        RoundedButton btnRegisterBottom = new RoundedButton(resizeImage("/Users/nodo/Desktop/Sistemas Interactivos/proyecto/interfaz/iconos/registerBottom.png", 120, 60));
+        RoundedButton btnRegisterBottom = new RoundedButton(resizeImage("interfaz/iconos/registerBottom.png", 120, 60));
         gbc.gridy = 4;
         panel.add(btnRegisterBottom, gbc);
 

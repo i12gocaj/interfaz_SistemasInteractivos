@@ -3,6 +3,9 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 import javax.imageio.ImageIO;
 import javax.swing.border.Border;
 import java.awt.event.ActionEvent;
@@ -10,10 +13,16 @@ import java.awt.event.ActionListener;
 
 public class SettingsFrame extends JFrame {
     public SettingsFrame(){
-        super("Settings");
+        super("");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(320, 500);
         setLayout(new BorderLayout());
+
+        Locale currentLocale = new Locale.Builder().setLanguage("en").setRegion("GB").build();
+        ResourceBundle bundle_text = ResourceBundle.getBundle("Bundle", currentLocale);
+
+        this.setTitle(bundle_text.getString("Titulo_Settings"));
+
 
         /*
          * Top Panel
@@ -23,7 +32,7 @@ public class SettingsFrame extends JFrame {
         topPanel.setBackground(Color.decode("#E8FAFF"));
         
         // Cargar y añadir el icono en la esquina superior izquierda
-        ImageIcon icon = resizeImage("iconos/logo.png", 60, 60);
+        ImageIcon icon = resizeImage("interfaz/iconos/logo.png", 60, 60);
         JButton iconButton = new JButton(icon);
         configureButton(iconButton);
         iconButton.addActionListener(new ActionListener() {
@@ -42,41 +51,41 @@ public class SettingsFrame extends JFrame {
         middlePanel.setBackground(Color.decode("#E8FAFF"));
         GridBagConstraints gbc = new GridBagConstraints();
 
-        JLabel notificationLabel = new JLabel("Notifications");
+        JLabel notificationLabel = new JLabel(bundle_text.getString("Notification"));
         notificationLabel.setFont(new Font("Arial", Font.BOLD, 12));
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(20, 0, 5, 0);
         middlePanel.add(notificationLabel, gbc);
         
-        JLabel brighnessLabel = new JLabel("Brightness");
+        JLabel brighnessLabel = new JLabel(bundle_text.getString("Brightness"));
         brighnessLabel.setFont(new Font("Arial", Font.BOLD, 12));
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.insets = new Insets(20, 0, 5, 0);
         middlePanel.add(brighnessLabel, gbc);
 
-        JLabel languageLabel = new JLabel("Language");
+        JLabel languageLabel = new JLabel(bundle_text.getString("Language"));
         languageLabel.setFont(new Font("Arial", Font.BOLD, 12));
         gbc.gridx = 0;
         gbc.gridy = 2;
         middlePanel.add(languageLabel, gbc);
 
-        ImageIcon notifications = resizeImage("iconos/notifications.png", 30, 30);
+        ImageIcon notifications = resizeImage("interfaz/iconos/notifications.png", 30, 30);
         JLabel notificationsLabel = new JLabel(notifications);
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.insets = new Insets(20, 0, 5, 0);
         middlePanel.add(notificationsLabel, gbc);
 
-        ImageIcon brightness = resizeImage("iconos/brightness.png", 30, 30);
+        ImageIcon brightness = resizeImage("interfaz/iconos/brightness.png", 30, 30);
         JLabel brightnessIcon = new JLabel(brightness);
         gbc.gridx = 1;
         gbc.gridy = 1;
         gbc.insets = new Insets(20, 0, 5, 0);
         middlePanel.add(brightnessIcon, gbc);
 
-        ImageIcon language = resizeImage("iconos/language.png", 30, 30);
+        ImageIcon language = resizeImage("interfaz/iconos/language.png", 30, 30);
         JLabel languageIcon = new JLabel(language);
         gbc.gridx = 1;
         gbc.gridy = 2;
@@ -91,7 +100,7 @@ public class SettingsFrame extends JFrame {
         bottomPanel.setBackground(Color.decode("#E8FAFF"));
 
         //JLabel para el mensaje de error
-        JLabel errorMessageLabel = new JLabel("Error password...");
+        JLabel errorMessageLabel = new JLabel(bundle_text.getString("Wrong_Username_Password"));
         errorMessageLabel.setForeground(Color.RED);
         errorMessageLabel.setHorizontalAlignment(SwingConstants.CENTER);
         errorMessageLabel.setFont(new Font("Arial", Font.BOLD, 12));
@@ -102,7 +111,7 @@ public class SettingsFrame extends JFrame {
 
         Border boldBorder = BorderFactory.createLineBorder(Color.BLACK, 1);
 
-        JPasswordField oldPasswordField = new JPasswordField("password");
+        JPasswordField oldPasswordField = new JPasswordField(bundle_text.getString("Password"));
         oldPasswordField.setForeground(Color.GRAY);
         oldPasswordField.setHorizontalAlignment(JTextField.CENTER);
         oldPasswordField.setFont(new Font("Arial", Font.PLAIN, 12));
@@ -111,7 +120,7 @@ public class SettingsFrame extends JFrame {
         oldPasswordField.addFocusListener(new java.awt.event.FocusAdapter() {
             @SuppressWarnings("deprecation")
             public void focusGained(java.awt.event.FocusEvent evt) {
-            if (oldPasswordField.getText().equals("password")) {
+            if (oldPasswordField.getText().equals(bundle_text.getString("Password"))) {
                 oldPasswordField.setText("");
                 oldPasswordField.setForeground(Color.BLACK);
             }
@@ -120,12 +129,12 @@ public class SettingsFrame extends JFrame {
             public void focusLost(java.awt.event.FocusEvent evt) {
             if (oldPasswordField.getText().isEmpty()) {
                 oldPasswordField.setForeground(Color.GRAY);
-                oldPasswordField.setText("password");
+                oldPasswordField.setText(bundle_text.getString("Password"));
             }
             }
         });
 
-        JPasswordField passwordField = new JPasswordField("password");
+        JPasswordField passwordField = new JPasswordField(bundle_text.getString("Password"));
         passwordField.setForeground(Color.GRAY);
         passwordField.setHorizontalAlignment(JTextField.CENTER);
         passwordField.setFont(new Font("Arial", Font.PLAIN, 12));
@@ -134,7 +143,7 @@ public class SettingsFrame extends JFrame {
         passwordField.addFocusListener(new java.awt.event.FocusAdapter() {
             @SuppressWarnings("deprecation")
             public void focusGained(java.awt.event.FocusEvent evt) {
-                if (passwordField.getText().equals("password")) {
+                if (passwordField.getText().equals(bundle_text.getString("Password"))) {
                     passwordField.setText("");
                     passwordField.setForeground(Color.BLACK);
                 }
@@ -143,12 +152,12 @@ public class SettingsFrame extends JFrame {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 if (passwordField.getText().isEmpty()) {
                     passwordField.setForeground(Color.GRAY);
-                    passwordField.setText("password");
+                    passwordField.setText(bundle_text.getString("Password"));
                 }
             }
         });
 
-        JPasswordField confirmPasswordField = new JPasswordField("confirm password");
+        JPasswordField confirmPasswordField = new JPasswordField(bundle_text.getString("Confirm_Password"));
         confirmPasswordField.setForeground(Color.GRAY);
         confirmPasswordField.setHorizontalAlignment(JTextField.CENTER);
         confirmPasswordField.setFont(new Font("Arial", Font.PLAIN, 12));
@@ -157,7 +166,7 @@ public class SettingsFrame extends JFrame {
         confirmPasswordField.addFocusListener(new java.awt.event.FocusAdapter() {
             @SuppressWarnings("deprecation")
             public void focusGained(java.awt.event.FocusEvent evt) {
-                if (confirmPasswordField.getText().equals("confirm password")) {
+                if (confirmPasswordField.getText().equals(bundle_text.getString("Confirm_Password"))) {
                     confirmPasswordField.setText("");
                     confirmPasswordField.setForeground(Color.BLACK);
                 }
@@ -166,12 +175,12 @@ public class SettingsFrame extends JFrame {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 if (confirmPasswordField.getText().isEmpty()) {
                     confirmPasswordField.setForeground(Color.GRAY);
-                    confirmPasswordField.setText("confirm password");
+                    confirmPasswordField.setText(bundle_text.getString("Confirm_Password"));
                 }
             }
         });
 
-        RoundedButton btnRegisterBottom = new RoundedButton(resizeImage("iconos/changePassword.png", 120, 30));
+        RoundedButton btnRegisterBottom = new RoundedButton(resizeImage("interfaz/iconos/changePassword.png", 120, 30));
         gbc.gridy = 4;
         bottomPanel.add(btnRegisterBottom, gbc);
 
@@ -199,7 +208,7 @@ public class SettingsFrame extends JFrame {
             }
         });
 
-        JLabel changePasswordLabel = new JLabel("Change Password");
+        JLabel changePasswordLabel = new JLabel(bundle_text.getString("Change_Password"));
 
         gbc.gridy = 0;
         gbc.insets = new Insets(20, 0, 5, 0);

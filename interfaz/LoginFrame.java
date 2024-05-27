@@ -3,6 +3,9 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 import javax.imageio.ImageIO;
 import javax.swing.border.Border;
 import java.awt.event.ActionEvent;
@@ -34,17 +37,22 @@ class RoundedButton extends JButton {
 public class LoginFrame extends JFrame {
 
     public LoginFrame() {
-        super("Login Interface");
+        super("");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(320, 500);
         Color backgroundColor = Color.decode("#E8FAFF");
         getContentPane().setBackground(backgroundColor);
 
+        Locale currentLocale = new Locale.Builder().setLanguage("en").setRegion("GB").build();
+        ResourceBundle bundle_text = ResourceBundle.getBundle("Bundle", currentLocale);
+
+        this.setTitle(bundle_text.getString("Titulo_Login"));
+
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBackground(backgroundColor);
         GridBagConstraints gbc = new GridBagConstraints();
 
-        ImageIcon icon = resizeImage("/Users/nodo/Desktop/Sistemas Interactivos/proyecto/interfaz/iconos/logo.png", 60, 60);
+        ImageIcon icon = resizeImage("interfaz/iconos/logo.png", 60, 60);
         JLabel iconLabel = new JLabel(icon);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridx = 0;
@@ -68,7 +76,7 @@ public class LoginFrame extends JFrame {
 
         Border boldBorder = BorderFactory.createLineBorder(Color.BLACK, 1);
 
-        JTextField emailField = new JTextField("email");
+        JTextField emailField = new JTextField(bundle_text.getString("Email"));
         emailField.setForeground(Color.GRAY);
         emailField.setHorizontalAlignment(JTextField.CENTER);
         emailField.setFont(new Font("Arial", Font.PLAIN, 12));
@@ -76,7 +84,7 @@ public class LoginFrame extends JFrame {
         emailField.setBorder(boldBorder);
         emailField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
-                if (emailField.getText().equals("email")) {
+                if (emailField.getText().equals(bundle_text.getString("Email"))) {
                     emailField.setText("");
                     emailField.setForeground(Color.BLACK);
                 }
@@ -84,12 +92,12 @@ public class LoginFrame extends JFrame {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 if (emailField.getText().isEmpty()) {
                     emailField.setForeground(Color.GRAY);
-                    emailField.setText("email");
+                    emailField.setText(bundle_text.getString("Email"));
                 }
             }
         });
 
-        JTextField passwordField = new JPasswordField("password");
+        JTextField passwordField = new JPasswordField(bundle_text.getString("Password"));
         passwordField.setForeground(Color.GRAY);
         passwordField.setHorizontalAlignment(JTextField.CENTER);
         passwordField.setFont(new Font("Arial", Font.PLAIN, 12));
@@ -97,7 +105,7 @@ public class LoginFrame extends JFrame {
         passwordField.setBorder(boldBorder);
         passwordField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
-                if (passwordField.getText().equals("password")) {
+                if (passwordField.getText().equals(bundle_text.getString("Password"))) {
                     passwordField.setText("");
                     passwordField.setForeground(Color.BLACK);
                 }
@@ -105,7 +113,7 @@ public class LoginFrame extends JFrame {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 if (passwordField.getText().isEmpty()) {
                     passwordField.setForeground(Color.GRAY);
-                    passwordField.setText("password");
+                    passwordField.setText(bundle_text.getString("Password"));
                 }
             }
         });
@@ -119,7 +127,7 @@ public class LoginFrame extends JFrame {
         panel.add(passwordField, gbc);
 
         // Create a rounded image label for login
-        RoundedButton btnLoginBottom = new RoundedButton(resizeImage("/Users/nodo/Desktop/Sistemas Interactivos/proyecto/interfaz/iconos/LoginBottom.png", 120, 60));
+        RoundedButton btnLoginBottom = new RoundedButton(resizeImage("interfaz/iconos/LoginBottom.png", 120, 60));
 
         // Añadimos action listener para cambiar a las otras páginas o mostrar un mensaje de error
         btnLoginBottom.addActionListener(new ActionListener() {

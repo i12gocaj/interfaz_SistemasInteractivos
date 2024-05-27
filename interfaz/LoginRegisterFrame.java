@@ -3,6 +3,9 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 import javax.imageio.ImageIO;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -35,13 +38,18 @@ public class LoginRegisterFrame extends JFrame {
     // Constructor de la clase
     public LoginRegisterFrame() {
         // Llamamos al constructor de la superclase JFrame y establecemos el título de la ventana
-        super("Login/Register Interface");
+        super("");
 
         // Configuramos el comportamiento de cierre de la ventana
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Establecemos el tamaño de la ventana a 320x480 píxeles
         setSize(320, 500);
+
+        Locale currentLocale = new Locale.Builder().setLanguage("en").setRegion("GB").build();
+        ResourceBundle bundle_text = ResourceBundle.getBundle("Bundle", currentLocale);
+
+        this.setTitle(bundle_text.getString("Titulo_Login_Register"));
 
         // Configuramos el color de fondo de la ventana usando el valor hexadecimal
         Color backgroundColor = Color.decode("#E8FAFF");
@@ -53,7 +61,7 @@ public class LoginRegisterFrame extends JFrame {
         GridBagConstraints gbc = new GridBagConstraints();
 
         // Cargamos la imagen del icono y la redimensionamos
-        ImageIcon icon = resizeImage("/Users/nodo/Desktop/Sistemas Interactivos/proyecto/interfaz/iconos/logo.png", 60, 60);
+        ImageIcon icon = resizeImage("interfaz/iconos/logo.png", 60, 60);
         JLabel iconLabel = new JLabel(icon);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridx = 0;
@@ -64,8 +72,8 @@ public class LoginRegisterFrame extends JFrame {
         panel.add(iconLabel, gbc);
 
         // Creamos e inicializamos los botones con imágenes redimensionadas
-        RoundedButton btnLogin = new RoundedButton(resizeImage("/Users/nodo/Desktop/Sistemas Interactivos/proyecto/interfaz/iconos/login.png", 120, 60));
-        RoundedButton btnRegister = new RoundedButton(resizeImage("/Users/nodo/Desktop/Sistemas Interactivos/proyecto/interfaz/iconos/register.png", 120, 60));
+        RoundedButton btnLogin = new RoundedButton(resizeImage("interfaz/iconos/login.png", 120, 60));
+        RoundedButton btnRegister = new RoundedButton(resizeImage("interfaz/iconos/register.png", 120, 60));
 
         // Añadimos action listener para cambiar a las otras paginas
 

@@ -3,6 +3,9 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 import javax.imageio.ImageIO;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -10,21 +13,26 @@ import java.awt.event.ActionEvent;
 public class HomeFrame extends JFrame {
 
     public HomeFrame() {
-        super("Home Interface");
+        super("");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(320, 500);
         setLayout(new BorderLayout());  // Usar BorderLayout para una distribución más flexible
+
+        Locale currentLocale = new Locale.Builder().setLanguage("en").setRegion("GB").build();
+        ResourceBundle bundle_text = ResourceBundle.getBundle("Bundle", currentLocale);
+
+        this.setTitle(bundle_text.getString("Titulo_Home"));
 
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new BorderLayout());
         topPanel.setBackground(Color.decode("#E8FAFF"));
         
         // Cargar y añadir el icono en la esquina superior izquierda
-        ImageIcon icon = resizeImage("iconos/logo.png", 60, 60);
+        ImageIcon icon = resizeImage("interfaz/iconos/logo.png", 60, 60);
         JLabel iconLabel = new JLabel(icon);
         topPanel.add(iconLabel, BorderLayout.WEST);
 
-        ImageIcon configure = resizeImage("iconos/configureIcon.png", 30, 30);
+        ImageIcon configure = resizeImage("interfaz/iconos/configureIcon.png", 30, 30);
         JButton configureButton = new JButton(configure);
         configureButton.addActionListener(new ActionListener() {
             @Override
@@ -52,7 +60,7 @@ public class HomeFrame extends JFrame {
         gbc.ipady = 40;  // Altura interna para hacer que los botones sean más altos
 
         // Crear botones con la imagen del rectángulo y el símbolo "+"
-        ImageIcon rectangleIcon = resizeImage("iconos/rectangle.png", 100, 100);
+        ImageIcon rectangleIcon = resizeImage("interfaz/iconos/rectangle.png", 100, 100);
         
         // Botón 1
         JButton button1 = new JButton("+", rectangleIcon);
