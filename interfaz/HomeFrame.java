@@ -12,14 +12,12 @@ import java.awt.event.ActionEvent;
 
 public class HomeFrame extends JFrame {
 
-    public HomeFrame() {
+    public HomeFrame(ResourceBundle bundle_text) {
         super("");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(320, 500);
         setLayout(new BorderLayout());  // Usar BorderLayout para una distribución más flexible
 
-        Locale currentLocale = new Locale.Builder().setLanguage("en").setRegion("GB").build();
-        ResourceBundle bundle_text = ResourceBundle.getBundle("Bundle", currentLocale);
 
         this.setTitle(bundle_text.getString("Titulo_Home"));
 
@@ -38,7 +36,7 @@ public class HomeFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
             dispose();
-            new SettingsFrame();
+            new SettingsFrame(bundle_text);
             }
         });
         configureButton.setOpaque(false);
@@ -146,7 +144,9 @@ public class HomeFrame extends JFrame {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new HomeFrame();
+                Locale currentLocale = new Locale.Builder().setLanguage("en").setRegion("GB").build();
+                ResourceBundle bundle_text = ResourceBundle.getBundle("Bundle", currentLocale);
+                new HomeFrame(bundle_text);
             }
         });
     }

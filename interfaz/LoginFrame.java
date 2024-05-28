@@ -36,15 +36,14 @@ class RoundedButton extends JButton {
 
 public class LoginFrame extends JFrame {
 
-    public LoginFrame() {
+    public LoginFrame(ResourceBundle bundle_text) {
         super("");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(320, 500);
         Color backgroundColor = Color.decode("#E8FAFF");
         getContentPane().setBackground(backgroundColor);
 
-        Locale currentLocale = new Locale.Builder().setLanguage("en").setRegion("GB").build();
-        ResourceBundle bundle_text = ResourceBundle.getBundle("Bundle", currentLocale);
+        
 
         this.setTitle(bundle_text.getString("Titulo_Login"));
 
@@ -63,7 +62,7 @@ public class LoginFrame extends JFrame {
         panel.add(iconLabel, gbc);
 
         // Crear un JLabel para el mensaje de error
-        JLabel errorMessageLabel = new JLabel("Error auth...");
+        JLabel errorMessageLabel = new JLabel(bundle_text.getString("Wrong_Username_Password"));
         errorMessageLabel.setForeground(Color.RED);
         errorMessageLabel.setHorizontalAlignment(SwingConstants.CENTER);
         errorMessageLabel.setFont(new Font("Arial", Font.BOLD, 12));
@@ -144,7 +143,7 @@ public class LoginFrame extends JFrame {
                     // Verificar si se ingresaron los textos predeterminados
                     if (email.equals("hola") && password.equals("hola")) {
                         dispose(); // Cerrar el marco de inicio de sesión
-                        new HomeFrame(); // Abrir la nueva pantalla
+                        new HomeFrame(bundle_text); // Abrir la nueva pantalla
                     } else {
                        
                         errorMessageLabel.setVisible(true); // Mostrar el mensaje de error
@@ -180,7 +179,9 @@ public class LoginFrame extends JFrame {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new LoginFrame();
+                Locale currentLocale = new Locale.Builder().setLanguage("en").setRegion("GB").build();
+                ResourceBundle bundle_text = ResourceBundle.getBundle("Bundle", currentLocale);
+                new LoginFrame(bundle_text);
             }
         });
     }

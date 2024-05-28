@@ -12,14 +12,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class SettingsFrame extends JFrame {
-    public SettingsFrame(){
+    public SettingsFrame(ResourceBundle bundle_text){
         super("");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(320, 500);
         setLayout(new BorderLayout());
 
-        Locale currentLocale = new Locale.Builder().setLanguage("en").setRegion("GB").build();
-        ResourceBundle bundle_text = ResourceBundle.getBundle("Bundle", currentLocale);
+
 
         this.setTitle(bundle_text.getString("Titulo_Settings"));
 
@@ -39,7 +38,7 @@ public class SettingsFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                new HomeFrame();
+                new HomeFrame(bundle_text);
             }
         });
         topPanel.add(iconButton, BorderLayout.WEST);
@@ -91,6 +90,95 @@ public class SettingsFrame extends JFrame {
         gbc.gridy = 2;
         gbc.insets = new Insets(20, 0, 5, 0);
         middlePanel.add(languageIcon, gbc);
+
+
+        ImageIcon switchIconOn = resizeImage("interfaz/iconos/switch_on.png", 40, 30);
+        ImageIcon switchIconOff = resizeImage("interfaz/iconos/switch_off.png", 40, 30);
+
+        JButton notificationsSwitch = new JButton(switchIconOn);
+        configureButton(notificationsSwitch);
+        notificationsSwitch.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (notificationsSwitch.getIcon().equals(switchIconOn)) {
+                    notificationsSwitch.setIcon(switchIconOff);
+                } else {
+                    notificationsSwitch.setIcon(switchIconOn);
+                }
+            }
+        });
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(20, 10, 5, 0);
+        middlePanel.add(notificationsSwitch, gbc);
+
+        JSlider brightnessSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 50);
+        brightnessSlider.setUI(new javax.swing.plaf.metal.MetalSliderUI() {
+            public void paintTrack(Graphics g) {
+            Graphics2D g2d = (Graphics2D) g;
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            Rectangle trackBounds = trackRect;
+            g2d.setColor(Color.decode("#E8FAFF"));
+            g2d.fillRect(trackBounds.x, trackBounds.y, trackBounds.width, trackBounds.height);
+            }
+
+            public void paintThumb(Graphics g) {
+            Graphics2D g2d = (Graphics2D) g;
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            Rectangle thumbBounds = thumbRect;
+            g2d.setColor(Color.decode("#007BFF"));
+            g2d.fillOval(thumbBounds.x, thumbBounds.y, thumbBounds.width, thumbBounds.height);
+            }
+        });
+        brightnessSlider.setMajorTickSpacing(10);
+        brightnessSlider.setMinorTickSpacing(1);
+        gbc.gridx = 2;
+        gbc.gridy = 1;
+        gbc.insets = new Insets(20, 10, 5, 0);
+        middlePanel.add(brightnessSlider, gbc);
+
+
+        JPanel languagePanel = new JPanel();
+
+        ImageIcon selectLanguage = resizeImage("interfaz/iconos/select_language.png", 50, 30);
+        JButton selectLanguageButtonE = new JButton("English", selectLanguage);
+        configureButton(selectLanguageButtonE);
+        selectLanguageButtonE.setFont(new Font("Arial", Font.PLAIN, 14));
+        selectLanguageButtonE.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Locale currentLocale = new Locale.Builder().setLanguage("en").setRegion("GB").build();
+                ResourceBundle bundle_text = ResourceBundle.getBundle("Bundle", currentLocale);
+                dispose();
+                new SettingsFrame(bundle_text);
+            }
+        });
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(20, 10, 5, 0);
+        languagePanel.add(selectLanguageButtonE, gbc);
+
+        JButton selectLanguageButtonS = new JButton("Español", selectLanguage);
+        configureButton(selectLanguageButtonS);
+        selectLanguageButtonS.setFont(new Font("Arial", Font.PLAIN, 14));
+        selectLanguageButtonS.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Locale currentLocale = new Locale.Builder().setLanguage("es").setRegion("ES").build();
+                ResourceBundle bundle_text = ResourceBundle.getBundle("Bundle", currentLocale);
+                dispose();
+                new SettingsFrame(bundle_text);
+            }
+        });
+        gbc.gridx = 3;
+        gbc.gridy = 2;
+        gbc.insets = new Insets(20, 0, 5, 0);
+        languagePanel.add(selectLanguageButtonS, gbc);
+
+        gbc.gridx = 2;
+        gbc.gridy = 2;
+        gbc.insets = new Insets(20, 10, 5, 0);
+        middlePanel.add(languagePanel, gbc);
 
         /*
          * Bottom Panel
@@ -203,7 +291,7 @@ public class SettingsFrame extends JFrame {
                     // Passwords match and all fields are filled
                     errorMessageLabel.setVisible(false);
                     dispose(); // Cerrar el marco de inicio de sesión
-                    new HomeFrame(); // Abrir la nueva pantalla
+                    new HomeFrame(bundle_text); // Abrir la nueva pantalla
                 }
             }
         });
@@ -274,7 +362,9 @@ public class SettingsFrame extends JFrame {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new SettingsFrame();
+                Locale currentLocale = new Locale.Builder().setLanguage("en").setRegion("GB").build();
+                ResourceBundle bundle_text = ResourceBundle.getBundle("Bundle", currentLocale);
+                new SettingsFrame(bundle_text);
             }
         });
     }

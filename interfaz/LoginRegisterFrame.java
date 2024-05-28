@@ -81,7 +81,7 @@ public class LoginRegisterFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                new LoginFrame();
+                new LoginFrame(bundle_text);
             }
         });
 
@@ -89,7 +89,7 @@ public class LoginRegisterFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                new RegisterFrame();
+                new RegisterFrame(bundle_text);
             }
         });
 
