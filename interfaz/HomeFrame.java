@@ -18,7 +18,6 @@ public class HomeFrame extends JFrame {
         setSize(320, 500);
         setLayout(new BorderLayout());  // Usar BorderLayout para una distribución más flexible
 
-
         this.setTitle(bundle_text.getString("Titulo_Home"));
 
         JPanel topPanel = new JPanel();
@@ -35,8 +34,8 @@ public class HomeFrame extends JFrame {
         configureButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            dispose();
-            new SettingsFrame(bundle_text);
+                dispose();
+                new SettingsFrame(bundle_text);
             }
         });
         configureButton.setOpaque(false);
@@ -44,7 +43,14 @@ public class HomeFrame extends JFrame {
         configureButton.setBorderPainted(false);
         configureButton.setFocusPainted(false);
         configureButton.setBorder(null);
-        topPanel.add(configureButton, BorderLayout.EAST);
+        
+        // Crear un JPanel para añadir el margen
+        JPanel configureButtonPanel = new JPanel(new BorderLayout());
+        configureButtonPanel.setOpaque(false); // Hacer que el panel sea transparente
+        configureButtonPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10)); // Añadir margen a la derecha
+        configureButtonPanel.add(configureButton, BorderLayout.EAST);
+
+        topPanel.add(configureButtonPanel, BorderLayout.EAST);
 
         // Preparar el panel principal para futuros elementos
         JPanel mainPanel = new JPanel(new GridBagLayout());
@@ -59,8 +65,6 @@ public class HomeFrame extends JFrame {
 
         // Crear botones con la imagen del rectángulo y el símbolo "+"
         ImageIcon rectangleIcon = resizeImage("interfaz/iconos/rectangle.png", 100, 100);
-        
-        
 
         for (int i = 0; i < 4; i++) {
             JButton button = new JButton(places[i], rectangleIcon);
@@ -112,6 +116,12 @@ public class HomeFrame extends JFrame {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
+                try {
+                    UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+    
                 Locale currentLocale = new Locale.Builder().setLanguage("en").setRegion("GB").build();
                 ResourceBundle bundle_text = ResourceBundle.getBundle("Bundle", currentLocale);
                 String[] places = { "+", "+", "+", "+" };
@@ -119,4 +129,5 @@ public class HomeFrame extends JFrame {
             }
         });
     }
-}
+}    
+
