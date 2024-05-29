@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
-
 import javax.imageio.ImageIO;
 import javax.swing.border.Border;
 import java.awt.event.ActionEvent;
@@ -42,7 +41,6 @@ public class RegisterFrame extends JFrame {
         setSize(320, 500);
         Color backgroundColor = Color.decode("#E8FAFF");
         getContentPane().setBackground(backgroundColor);
-
 
         this.setTitle(bundle_text.getString("Titulo_Register"));
 
@@ -166,15 +164,17 @@ public class RegisterFrame extends JFrame {
 
                 // Verificar si algún campo está vacío o las contraseñas no coinciden
                 if (email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
-                   
-                    errorMessageLabel.setVisible(true);
+                    errorMessageLabel.setText(bundle_text.getString("Fields_Cannot_Be_Empty"));
+                    errorMessageLabel.setVisible(true); // Mostrar el mensaje de error
+                    hideErrorMessageAfterDelay(errorMessageLabel, 3000);
                 } else if (!password.equals(confirmPassword)) {
-                    
-                    errorMessageLabel.setVisible(true);
+                    errorMessageLabel.setText(bundle_text.getString("Wrong_Username_Password"));
+                    errorMessageLabel.setVisible(true); // Mostrar el mensaje de error
+                    hideErrorMessageAfterDelay(errorMessageLabel, 3000);
                 } else {
                     // Passwords match and all fields are filled
                     errorMessageLabel.setVisible(false);
-                    dispose(); // Cerrar el marco de inicio de sesión
+                    dispose(); // Cerrar el marco de registro
                     String[] places = { "+", "+", "+", "+" };
                     new HomeFrame(bundle_text, places); // Abrir la nueva pantalla
                 }
@@ -198,12 +198,29 @@ public class RegisterFrame extends JFrame {
         }
     }
 
+    private void hideErrorMessageAfterDelay(JLabel label, int delay) {
+        Timer timer = new Timer(delay, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                label.setVisible(false);
+            }
+        });
+        timer.setRepeats(false); // Ensure the timer only runs once
+        timer.start();
+    }
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
+                try {
+                    UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
                 Locale currentLocale = new Locale.Builder().setLanguage("en").setRegion("GB").build();
-                ResourceBundle bundle_text = ResourceBundle.getBundle("Bundle", currentLocale);        
+                ResourceBundle bundle_text = ResourceBundle.getBundle("Bundle", currentLocale);
                 new RegisterFrame(bundle_text);
             }
         });

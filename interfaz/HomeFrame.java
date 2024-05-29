@@ -72,7 +72,8 @@ public class HomeFrame extends JFrame {
             button.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    System.out.println("Botón pulsado");
+                    dispose();
+                    new ConfigureRoom(bundle_text);
                 }
             });
             gbc.gridx = i % 2;
@@ -130,4 +131,3 @@ public class HomeFrame extends JFrame {
         });
     }
 }    
-

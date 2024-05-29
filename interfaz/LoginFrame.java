@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
-
 import javax.imageio.ImageIO;
 import javax.swing.border.Border;
 import java.awt.event.ActionEvent;
@@ -43,8 +42,6 @@ public class LoginFrame extends JFrame {
         Color backgroundColor = Color.decode("#E8FAFF");
         getContentPane().setBackground(backgroundColor);
 
-        
-
         this.setTitle(bundle_text.getString("Titulo_Login"));
 
         JPanel panel = new JPanel(new GridBagLayout());
@@ -71,8 +68,6 @@ public class LoginFrame extends JFrame {
         panel.add(errorMessageLabel, gbc);
         errorMessageLabel.setVisible(false);
 
-
-
         Border boldBorder = BorderFactory.createLineBorder(Color.BLACK, 1);
 
         JTextField emailField = new JTextField(bundle_text.getString("Email"));
@@ -88,6 +83,7 @@ public class LoginFrame extends JFrame {
                     emailField.setForeground(Color.BLACK);
                 }
             }
+
             public void focusLost(java.awt.event.FocusEvent evt) {
                 if (emailField.getText().isEmpty()) {
                     emailField.setForeground(Color.GRAY);
@@ -109,6 +105,7 @@ public class LoginFrame extends JFrame {
                     passwordField.setForeground(Color.BLACK);
                 }
             }
+
             public void focusLost(java.awt.event.FocusEvent evt) {
                 if (passwordField.getText().isEmpty()) {
                     passwordField.setForeground(Color.GRAY);
@@ -134,25 +131,26 @@ public class LoginFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String email = emailField.getText();
                 String password = passwordField.getText();
-                
+
                 // Verificar si algún campo está vacío
                 if (email.isEmpty() || password.isEmpty()) {
+                    errorMessageLabel.setText(bundle_text.getString("Fields_Cannot_Be_Empty"));
                     errorMessageLabel.setVisible(true); // Mostrar el mensaje de error
-                } // Mostrar el mensaje de error  
-                else {
+                    hideErrorMessageAfterDelay(errorMessageLabel, 3000);
+                } else {
                     // Verificar si se ingresaron los textos predeterminados
                     if (email.equals("hola") && password.equals("hola")) {
                         dispose(); // Cerrar el marco de inicio de sesión
                         String[] places = { "+", "+", "+", "+" };
                         new HomeFrame(bundle_text, places); // Abrir la nueva pantalla
                     } else {
-                       
+                        errorMessageLabel.setText(bundle_text.getString("Wrong_Username_Password"));
                         errorMessageLabel.setVisible(true); // Mostrar el mensaje de error
+                        hideErrorMessageAfterDelay(errorMessageLabel, 3000);
                     }
                 }
             }
         });
-
 
         gbc.gridy = 3;
         gbc.gridwidth = 1;
@@ -176,10 +174,27 @@ public class LoginFrame extends JFrame {
         }
     }
 
+    private void hideErrorMessageAfterDelay(JLabel label, int delay) {
+        Timer timer = new Timer(delay, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                label.setVisible(false);
+            }
+        });
+        timer.setRepeats(false); // Ensure the timer only runs once
+        timer.start();
+    }
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
+                try {
+                    UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
                 Locale currentLocale = new Locale.Builder().setLanguage("en").setRegion("GB").build();
                 ResourceBundle bundle_text = ResourceBundle.getBundle("Bundle", currentLocale);
                 new LoginFrame(bundle_text);

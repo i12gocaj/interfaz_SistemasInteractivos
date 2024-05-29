@@ -130,13 +130,20 @@ public class LoginRegisterFrame extends JFrame {
     }
 
     // Método main para ejecutar la aplicación
-    public static void main(String[] args) {
-        // Aseguramos que la UI se inicie en el Event Dispatch Thread
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new LoginRegisterFrame();
+
+
+public static void main(String[] args) {
+    SwingUtilities.invokeLater(new Runnable() {
+        @Override
+        public void run() {
+            try {
+                UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        });
-    }
+            
+            new LoginRegisterFrame();
+        }
+    });
+}
 }

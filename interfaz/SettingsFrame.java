@@ -5,24 +5,22 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
-
 import javax.imageio.ImageIO;
 import javax.swing.border.Border;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class SettingsFrame extends JFrame {
+    private JLabel errorMessageLabel;
+
     public SettingsFrame(ResourceBundle bundle_text){
         super("");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(320, 500);
         setLayout(new BorderLayout());
 
-
-
         this.setTitle(bundle_text.getString("Titulo_Settings"));
         String[] places = { "+", "+", "+", "+" };
-
 
         /*
          * Top Panel
@@ -69,6 +67,7 @@ public class SettingsFrame extends JFrame {
         languageLabel.setFont(new Font("Arial", Font.BOLD, 12));
         gbc.gridx = 0;
         gbc.gridy = 2;
+        gbc.insets = new Insets(10, 0, 5, 0); // Ajustar el espacio
         middlePanel.add(languageLabel, gbc);
 
         ImageIcon notifications = resizeImage("interfaz/iconos/notifications.png", 30, 30);
@@ -89,9 +88,8 @@ public class SettingsFrame extends JFrame {
         JLabel languageIcon = new JLabel(language);
         gbc.gridx = 1;
         gbc.gridy = 2;
-        gbc.insets = new Insets(20, 0, 5, 0);
+        gbc.insets = new Insets(10, 0, 5, 0); // Ajustar el espacio
         middlePanel.add(languageIcon, gbc);
-
 
         ImageIcon switchIconOn = resizeImage("interfaz/iconos/switch_on.png", 40, 30);
         ImageIcon switchIconOff = resizeImage("interfaz/iconos/switch_off.png", 40, 30);
@@ -116,19 +114,19 @@ public class SettingsFrame extends JFrame {
         JSlider brightnessSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 50);
         brightnessSlider.setUI(new javax.swing.plaf.metal.MetalSliderUI() {
             public void paintTrack(Graphics g) {
-            Graphics2D g2d = (Graphics2D) g;
-            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            Rectangle trackBounds = trackRect;
-            g2d.setColor(Color.decode("#E8FAFF"));
-            g2d.fillRect(trackBounds.x, trackBounds.y, trackBounds.width, trackBounds.height);
+                Graphics2D g2d = (Graphics2D) g;
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                Rectangle trackBounds = trackRect;
+                g2d.setColor(Color.decode("#E8FAFF"));
+                g2d.fillRect(trackBounds.x, trackBounds.y, trackBounds.width, trackBounds.height);
             }
 
             public void paintThumb(Graphics g) {
-            Graphics2D g2d = (Graphics2D) g;
-            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            Rectangle thumbBounds = thumbRect;
-            g2d.setColor(Color.decode("#007BFF"));
-            g2d.fillOval(thumbBounds.x, thumbBounds.y, thumbBounds.width, thumbBounds.height);
+                Graphics2D g2d = (Graphics2D) g;
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                Rectangle thumbBounds = thumbRect;
+                g2d.setColor(Color.decode("#007BFF"));
+                g2d.fillOval(thumbBounds.x, thumbBounds.y, thumbBounds.width, thumbBounds.height);
             }
         });
         brightnessSlider.setMajorTickSpacing(10);
@@ -137,7 +135,6 @@ public class SettingsFrame extends JFrame {
         gbc.gridy = 1;
         gbc.insets = new Insets(20, 10, 5, 0);
         middlePanel.add(brightnessSlider, gbc);
-
 
         JPanel languagePanel = new JPanel();
 
@@ -171,14 +168,15 @@ public class SettingsFrame extends JFrame {
                 new SettingsFrame(bundle_text);
             }
         });
-        gbc.gridx = 3;
-        gbc.gridy = 2;
-        gbc.insets = new Insets(20, 0, 5, 0);
+        gbc.gridx = 1;  // Cambiar la posición para evitar que el botón esté fuera de los límites
+        gbc.gridy = 0;
+        gbc.insets = new Insets(20, 10, 5, 0);
         languagePanel.add(selectLanguageButtonS, gbc);
 
         gbc.gridx = 2;
         gbc.gridy = 2;
-        gbc.insets = new Insets(20, 10, 5, 0);
+        gbc.gridwidth = 2;  // Expandir el componente para que no quede tapado
+        gbc.insets = new Insets(10, 10, 5, 0); // Ajustar el espacio
         middlePanel.add(languagePanel, gbc);
 
         /*
@@ -189,7 +187,7 @@ public class SettingsFrame extends JFrame {
         bottomPanel.setBackground(Color.decode("#E8FAFF"));
 
         //JLabel para el mensaje de error
-        JLabel errorMessageLabel = new JLabel(bundle_text.getString("Wrong_Username_Password"));
+        errorMessageLabel = new JLabel();
         errorMessageLabel.setForeground(Color.RED);
         errorMessageLabel.setHorizontalAlignment(SwingConstants.CENTER);
         errorMessageLabel.setFont(new Font("Arial", Font.BOLD, 12));
@@ -200,76 +198,70 @@ public class SettingsFrame extends JFrame {
 
         Border boldBorder = BorderFactory.createLineBorder(Color.BLACK, 1);
 
-        JPasswordField oldPasswordField = new JPasswordField(bundle_text.getString("Password"));
+        JTextField oldPasswordField = new JTextField(bundle_text.getString("Old_Password"));
         oldPasswordField.setForeground(Color.GRAY);
         oldPasswordField.setHorizontalAlignment(JTextField.CENTER);
         oldPasswordField.setFont(new Font("Arial", Font.PLAIN, 12));
         oldPasswordField.setPreferredSize(new Dimension(180, 30));
         oldPasswordField.setBorder(boldBorder);
         oldPasswordField.addFocusListener(new java.awt.event.FocusAdapter() {
-            @SuppressWarnings("deprecation")
             public void focusGained(java.awt.event.FocusEvent evt) {
-            if (oldPasswordField.getText().equals(bundle_text.getString("Password"))) {
-                oldPasswordField.setText("");
-                oldPasswordField.setForeground(Color.BLACK);
+                if (oldPasswordField.getText().equals(bundle_text.getString("Old_Password"))) {
+                    oldPasswordField.setText("");
+                    oldPasswordField.setForeground(Color.BLACK);
+                }
             }
-            }
-            @SuppressWarnings("deprecation")
             public void focusLost(java.awt.event.FocusEvent evt) {
-            if (oldPasswordField.getText().isEmpty()) {
-                oldPasswordField.setForeground(Color.GRAY);
-                oldPasswordField.setText(bundle_text.getString("Password"));
-            }
+                if (oldPasswordField.getText().isEmpty()) {
+                    oldPasswordField.setForeground(Color.GRAY);
+                    oldPasswordField.setText(bundle_text.getString("Old_Password"));
+                }
             }
         });
 
-        JPasswordField passwordField = new JPasswordField(bundle_text.getString("Password"));
+        JTextField passwordField = new JTextField(bundle_text.getString("New_Password"));
         passwordField.setForeground(Color.GRAY);
         passwordField.setHorizontalAlignment(JTextField.CENTER);
         passwordField.setFont(new Font("Arial", Font.PLAIN, 12));
         passwordField.setPreferredSize(new Dimension(180, 30));
         passwordField.setBorder(boldBorder);
         passwordField.addFocusListener(new java.awt.event.FocusAdapter() {
-            @SuppressWarnings("deprecation")
             public void focusGained(java.awt.event.FocusEvent evt) {
-                if (passwordField.getText().equals(bundle_text.getString("Password"))) {
+                if (passwordField.getText().equals(bundle_text.getString("New_Password"))) {
                     passwordField.setText("");
                     passwordField.setForeground(Color.BLACK);
                 }
             }
-            @SuppressWarnings("deprecation")
             public void focusLost(java.awt.event.FocusEvent evt) {
                 if (passwordField.getText().isEmpty()) {
                     passwordField.setForeground(Color.GRAY);
-                    passwordField.setText(bundle_text.getString("Password"));
+                    passwordField.setText(bundle_text.getString("New_Password"));
                 }
             }
         });
 
-        JPasswordField confirmPasswordField = new JPasswordField(bundle_text.getString("Confirm_Password"));
+        JTextField confirmPasswordField = new JTextField(bundle_text.getString("New_Password"));
         confirmPasswordField.setForeground(Color.GRAY);
         confirmPasswordField.setHorizontalAlignment(JTextField.CENTER);
         confirmPasswordField.setFont(new Font("Arial", Font.PLAIN, 12));
         confirmPasswordField.setPreferredSize(new Dimension(180, 30));
         confirmPasswordField.setBorder(boldBorder);
         confirmPasswordField.addFocusListener(new java.awt.event.FocusAdapter() {
-            @SuppressWarnings("deprecation")
             public void focusGained(java.awt.event.FocusEvent evt) {
-                if (confirmPasswordField.getText().equals(bundle_text.getString("Confirm_Password"))) {
+                if (confirmPasswordField.getText().equals(bundle_text.getString("New_Password"))) {
                     confirmPasswordField.setText("");
                     confirmPasswordField.setForeground(Color.BLACK);
                 }
             }
-            @SuppressWarnings("deprecation")
             public void focusLost(java.awt.event.FocusEvent evt) {
                 if (confirmPasswordField.getText().isEmpty()) {
                     confirmPasswordField.setForeground(Color.GRAY);
-                    confirmPasswordField.setText(bundle_text.getString("Confirm_Password"));
+                    confirmPasswordField.setText(bundle_text.getString("New_Password"));
                 }
             }
         });
 
-        RoundedButton btnRegisterBottom = new RoundedButton(resizeImage("interfaz/iconos/changePassword.png", 120, 30));
+        RoundedButton btnRegisterBottom = new RoundedButton(resizeImage("interfaz/iconos/changePassword.png", 120, 40));
         gbc.gridy = 4;
         bottomPanel.add(btnRegisterBottom, gbc);
 
@@ -277,15 +269,17 @@ public class SettingsFrame extends JFrame {
         btnRegisterBottom.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String oldPassword = new String(oldPasswordField.getPassword());
-                String password = new String(passwordField.getPassword());
-                String confirmPassword = new String(confirmPasswordField.getPassword());
+                String oldPassword = oldPasswordField.getText();
+                String newPassword = passwordField.getText();
+                String confirmPassword = confirmPasswordField.getText();
 
                 // Verificar si algún campo está vacío o las contraseñas no coinciden
-                if (oldPassword.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+                if (oldPassword.isEmpty() || newPassword.isEmpty() || confirmPassword.isEmpty()) {
+                    errorMessageLabel.setText(bundle_text.getString("Fields_Cannot_Be_Empty"));
                     errorMessageLabel.setVisible(true);
                     hideErrorMessageAfterDelay(errorMessageLabel, 3000);
-                } else if (!password.equals(confirmPassword)) {
+                } else if (!newPassword.equals(confirmPassword)) {
+                    errorMessageLabel.setText(bundle_text.getString("Wrong_Username_Password"));
                     errorMessageLabel.setVisible(true);
                     hideErrorMessageAfterDelay(errorMessageLabel, 3000);
                 } else {
@@ -303,19 +297,18 @@ public class SettingsFrame extends JFrame {
         gbc.insets = new Insets(20, 0, 5, 0);
         bottomPanel.add(changePasswordLabel, gbc);
 
-
         gbc.gridy = 1;
-        gbc.insets = new Insets(10, 0, 5, 0);
+        gbc.insets = new Insets(10, 0, 20, 0);  // Separar el primer cuadro de texto
         bottomPanel.add(oldPasswordField, gbc);
-
+        
         gbc.gridy = 2;
-        gbc.insets = new Insets(10, 0, 5, 0);
+        gbc.insets = new Insets(5, 0, 5, 0);  // Reducir el espacio entre el segundo y tercer cuadro de texto
         bottomPanel.add(passwordField, gbc);
-
+        
         gbc.gridy = 3;
-        gbc.insets = new Insets(10, 0, 5, 0);
+        gbc.insets = new Insets(5, 0, 10, 0);  // Ajustar el espacio del tercer cuadro de texto
         bottomPanel.add(confirmPasswordField, gbc);
-
+        
 
         add(topPanel, BorderLayout.NORTH);
         add(middlePanel, BorderLayout.CENTER);
