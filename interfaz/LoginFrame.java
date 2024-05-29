@@ -143,7 +143,8 @@ public class LoginFrame extends JFrame {
                     // Verificar si se ingresaron los textos predeterminados
                     if (email.equals("hola") && password.equals("hola")) {
                         dispose(); // Cerrar el marco de inicio de sesión
-                        new HomeFrame(bundle_text); // Abrir la nueva pantalla
+                        String[] places = { "+", "+", "+", "+" };
+                        new HomeFrame(bundle_text, places); // Abrir la nueva pantalla
                     } else {
                        
                         errorMessageLabel.setVisible(true); // Mostrar el mensaje de error

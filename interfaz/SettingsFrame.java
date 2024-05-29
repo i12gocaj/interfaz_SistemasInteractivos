@@ -21,6 +21,7 @@ public class SettingsFrame extends JFrame {
 
 
         this.setTitle(bundle_text.getString("Titulo_Settings"));
+        String[] places = { "+", "+", "+", "+" };
 
 
         /*
@@ -38,7 +39,7 @@ public class SettingsFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                new HomeFrame(bundle_text);
+                new HomeFrame(bundle_text, places);
             }
         });
         topPanel.add(iconButton, BorderLayout.WEST);
@@ -291,7 +292,7 @@ public class SettingsFrame extends JFrame {
                     // Passwords match and all fields are filled
                     errorMessageLabel.setVisible(false);
                     dispose(); // Cerrar el marco de inicio de sesión
-                    new HomeFrame(bundle_text); // Abrir la nueva pantalla
+                    new HomeFrame(bundle_text, places); // Abrir la nueva pantalla
                 }
             }
         });

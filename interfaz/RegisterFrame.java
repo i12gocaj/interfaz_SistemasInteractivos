@@ -175,7 +175,8 @@ public class RegisterFrame extends JFrame {
                     // Passwords match and all fields are filled
                     errorMessageLabel.setVisible(false);
                     dispose(); // Cerrar el marco de inicio de sesión
-                    new HomeFrame(bundle_text); // Abrir la nueva pantalla
+                    String[] places = { "+", "+", "+", "+" };
+                    new HomeFrame(bundle_text, places); // Abrir la nueva pantalla
                 }
             }
         });

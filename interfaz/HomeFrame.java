@@ -12,7 +12,7 @@ import java.awt.event.ActionEvent;
 
 public class HomeFrame extends JFrame {
 
-    public HomeFrame(ResourceBundle bundle_text) {
+    public HomeFrame(ResourceBundle bundle_text, String[] places) {
         super("");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(320, 500);
@@ -53,60 +53,28 @@ public class HomeFrame extends JFrame {
 
         // Configuraciones generales para todos los botones
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(10, 10, 10, 10);  // Espacio entre botones
+        gbc.insets = new Insets(10, 0, 10, 0);  // Espacio entre botones
         gbc.ipadx = 40;  // Ancho interno para hacer que los botones sean más anchos
         gbc.ipady = 40;  // Altura interna para hacer que los botones sean más altos
 
         // Crear botones con la imagen del rectángulo y el símbolo "+"
         ImageIcon rectangleIcon = resizeImage("interfaz/iconos/rectangle.png", 100, 100);
         
-        // Botón 1
-        JButton button1 = new JButton("+", rectangleIcon);
-        configureButton(button1);
-        button1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Botón 1 pulsado");
-            }
-        });
-        gbc.gridx = 0; gbc.gridy = 0;
-        mainPanel.add(button1, gbc);
+        
 
-        // Botón 2
-        JButton button2 = new JButton("+", rectangleIcon);
-        configureButton(button2);
-        button2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Botón 1 pulsado");
-            }
-        });
-        gbc.gridx = 1; gbc.gridy = 0;
-        mainPanel.add(button2, gbc);
-
-        // Botón 3
-        JButton button3 = new JButton("+", rectangleIcon);
-        configureButton(button3);
-        button3.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Botón 1 pulsado");
-            }
-        });
-        gbc.gridx = 0; gbc.gridy = 1;
-        mainPanel.add(button3, gbc);
-
-        // Botón 4
-        JButton button4 = new JButton("+", rectangleIcon);
-        configureButton(button4);
-        button4.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Botón 1 pulsado");
-            }
-        });
-        gbc.gridx = 1; gbc.gridy = 1;
-        mainPanel.add(button4, gbc);
+        for (int i = 0; i < 4; i++) {
+            JButton button = new JButton(places[i], rectangleIcon);
+            configureButton(button);
+            button.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    System.out.println("Botón pulsado");
+                }
+            });
+            gbc.gridx = i % 2;
+            gbc.gridy = i / 2;
+            mainPanel.add(button, gbc);
+        }
 
         // Añade paneles al JFrame
         add(topPanel, BorderLayout.NORTH);
@@ -146,7 +114,8 @@ public class HomeFrame extends JFrame {
             public void run() {
                 Locale currentLocale = new Locale.Builder().setLanguage("en").setRegion("GB").build();
                 ResourceBundle bundle_text = ResourceBundle.getBundle("Bundle", currentLocale);
-                new HomeFrame(bundle_text);
+                String[] places = { "+", "+", "+", "+" };
+                new HomeFrame(bundle_text, places);
             }
         });
     }
