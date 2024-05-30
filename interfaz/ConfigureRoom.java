@@ -1,8 +1,13 @@
 import javax.swing.*;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import javax.imageio.ImageIO;
@@ -11,7 +16,7 @@ import java.awt.event.ActionListener;
 
 public class ConfigureRoom extends JFrame {
 
-    public ConfigureRoom(ResourceBundle bundle_text) {
+    public ConfigureRoom(ResourceBundle bundle_text, ArrayList<String> roomNames) {
         super("");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(320, 500);
@@ -36,8 +41,7 @@ public class ConfigureRoom extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                String[] places = {"+", "+", "+", "+"};
-                new HomeFrame(bundle_text, places);
+                new HomeFrame(bundle_text, roomNames);
             }
         });
         topPanel.add(homeButton, BorderLayout.WEST);
@@ -52,7 +56,7 @@ public class ConfigureRoom extends JFrame {
         configureButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Acción al pulsar el botón de configuración
+                new SettingsFrame(bundle_text, roomNames);
             }
         });
         topPanel.add(configureButton, BorderLayout.EAST);
@@ -66,14 +70,14 @@ public class ConfigureRoom extends JFrame {
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 10, 10, 10)); // Añadir margen superior
         mainPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel titleLabel = new JLabel("Configure room");
+        JLabel titleLabel = new JLabel(bundle_text.getString("Configure_Room"));
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         mainPanel.add(titleLabel);
 
         mainPanel.add(Box.createRigidArea(new Dimension(0, 20))); // Espacio entre el título y el campo de texto
 
-        JTextField nameField = new JTextField("Introduce name");
+        JTextField nameField = new JTextField(bundle_text.getString("Name_Room"));
         nameField.setForeground(Color.GRAY);
         nameField.setHorizontalAlignment(JTextField.CENTER);
         nameField.setFont(new Font("Arial", Font.PLAIN, 12));
@@ -81,7 +85,7 @@ public class ConfigureRoom extends JFrame {
         nameField.setPreferredSize(new Dimension(180, 30));
         nameField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
-                if (nameField.getText().equals("Introduce name")) {
+                if (nameField.getText().equals(bundle_text.getString("Name_Room"))) {
                     nameField.setText("");
                     nameField.setForeground(Color.BLACK);
                 }
@@ -89,10 +93,28 @@ public class ConfigureRoom extends JFrame {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 if (nameField.getText().isEmpty()) {
                     nameField.setForeground(Color.GRAY);
-                    nameField.setText("Introduce name");
+                    nameField.setText(bundle_text.getString("Name_Room"));
                 }
             }
         });
+
+        // Limitar el número de caracteres a 10
+        ((AbstractDocument) nameField.getDocument()).setDocumentFilter(new DocumentFilter() {
+            @Override
+            public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
+                if ((fb.getDocument().getLength() + string.length()) <= 10) {
+                    super.insertString(fb, offset, string, attr);
+                }
+            }
+
+            @Override
+            public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+                if ((fb.getDocument().getLength() + text.length() - length) <= 10) {
+                    super.replace(fb, offset, length, text, attrs);
+                }
+            }
+        });
+
         nameField.setAlignmentX(Component.CENTER_ALIGNMENT);
         mainPanel.add(nameField);
 
@@ -107,7 +129,12 @@ public class ConfigureRoom extends JFrame {
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Acción al pulsar el botón de añadir
+                String roomName = nameField.getText();
+                if (!roomName.equals(bundle_text.getString("Name_Room")) && !roomName.isEmpty()) {
+                    roomNames.set(roomNames.indexOf("+"), roomName);
+                }
+                dispose();
+                new HomeFrame(bundle_text, roomNames);
             }
         });
         addButton.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -143,7 +170,11 @@ public class ConfigureRoom extends JFrame {
 
                 Locale currentLocale = new Locale.Builder().setLanguage("en").setRegion("GB").build();
                 ResourceBundle bundle_text = ResourceBundle.getBundle("Bundle", currentLocale);
-                new ConfigureRoom(bundle_text);
+                ArrayList<String> roomNames = new ArrayList<>();
+                for (int i = 0; i < 4; i++) {
+                    roomNames.add("+");
+                }
+                new ConfigureRoom(bundle_text, roomNames);
             }
         });
     }

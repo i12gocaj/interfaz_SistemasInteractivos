@@ -1,14 +1,17 @@
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
-import javax.swing.border.Border;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 // Clase para botones redondeados
 class RoundedButton extends JButton {
@@ -35,7 +38,7 @@ class RoundedButton extends JButton {
 
 public class RegisterFrame extends JFrame {
 
-    public RegisterFrame(ResourceBundle bundle_text) {
+    public RegisterFrame(ResourceBundle bundle_text, ArrayList<String> roomNames) {
         super("");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(320, 500);
@@ -50,6 +53,14 @@ public class RegisterFrame extends JFrame {
 
         ImageIcon icon = resizeImage("interfaz/iconos/logo.png", 60, 60);
         JLabel iconLabel = new JLabel(icon);
+        iconLabel.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Cambiar cursor para indicar que es clicable
+        iconLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                dispose();
+                new LoginRegisterFrame(roomNames);
+            }
+        });
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -83,6 +94,7 @@ public class RegisterFrame extends JFrame {
                     emailField.setForeground(Color.BLACK);
                 }
             }
+
             public void focusLost(java.awt.event.FocusEvent evt) {
                 if (emailField.getText().isEmpty()) {
                     emailField.setForeground(Color.GRAY);
@@ -92,50 +104,12 @@ public class RegisterFrame extends JFrame {
         });
 
         JPasswordField passwordField = new JPasswordField(bundle_text.getString("Password"));
-        passwordField.setForeground(Color.GRAY);
-        passwordField.setHorizontalAlignment(JTextField.CENTER);
-        passwordField.setFont(new Font("Arial", Font.PLAIN, 12));
-        passwordField.setPreferredSize(new Dimension(180, 30));
+        configurePasswordField(passwordField, bundle_text.getString("Password"));
         passwordField.setBorder(boldBorder);
-        passwordField.addFocusListener(new java.awt.event.FocusAdapter() {
-            @SuppressWarnings("deprecation")
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                if (passwordField.getText().equals(bundle_text.getString("Password"))) {
-                    passwordField.setText("");
-                    passwordField.setForeground(Color.BLACK);
-                }
-            }
-            @SuppressWarnings("deprecation")
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                if (passwordField.getText().isEmpty()) {
-                    passwordField.setForeground(Color.GRAY);
-                    passwordField.setText(bundle_text.getString("Password"));
-                }
-            }
-        });
 
         JPasswordField confirmPasswordField = new JPasswordField(bundle_text.getString("Confirm_Password"));
-        confirmPasswordField.setForeground(Color.GRAY);
-        confirmPasswordField.setHorizontalAlignment(JTextField.CENTER);
-        confirmPasswordField.setFont(new Font("Arial", Font.PLAIN, 12));
-        confirmPasswordField.setPreferredSize(new Dimension(180, 30));
+        configurePasswordField(confirmPasswordField, bundle_text.getString("Confirm_Password"));
         confirmPasswordField.setBorder(boldBorder);
-        confirmPasswordField.addFocusListener(new java.awt.event.FocusAdapter() {
-            @SuppressWarnings("deprecation")
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                if (confirmPasswordField.getText().equals(bundle_text.getString("Confirm_Password"))) {
-                    confirmPasswordField.setText("");
-                    confirmPasswordField.setForeground(Color.BLACK);
-                }
-            }
-            @SuppressWarnings("deprecation")
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                if (confirmPasswordField.getText().isEmpty()) {
-                    confirmPasswordField.setForeground(Color.GRAY);
-                    confirmPasswordField.setText(bundle_text.getString("Confirm_Password"));
-                }
-            }
-        });
 
         gbc.gridy = 1;
         gbc.insets = new Insets(20, 0, 5, 0);
@@ -175,8 +149,7 @@ public class RegisterFrame extends JFrame {
                     // Passwords match and all fields are filled
                     errorMessageLabel.setVisible(false);
                     dispose(); // Cerrar el marco de registro
-                    String[] places = { "+", "+", "+", "+" };
-                    new HomeFrame(bundle_text, places); // Abrir la nueva pantalla
+                    new HomeFrame(bundle_text, roomNames); // Abrir la nueva pantalla
                 }
             }
         });
@@ -185,6 +158,32 @@ public class RegisterFrame extends JFrame {
         setResizable(false);
         setLocationRelativeTo(null);
         setVisible(true);
+    }
+
+    private void configurePasswordField(JPasswordField passwordField, String placeholder) {
+        passwordField.setForeground(Color.GRAY);
+        passwordField.setHorizontalAlignment(JTextField.CENTER);
+        passwordField.setFont(new Font("Arial", Font.PLAIN, 12));
+        passwordField.setPreferredSize(new Dimension(180, 30));
+        passwordField.setEchoChar((char) 0);  // Mostrar texto por defecto
+
+        passwordField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                if (String.valueOf(passwordField.getPassword()).equals(placeholder)) {
+                    passwordField.setText("");
+                    passwordField.setForeground(Color.BLACK);
+                    passwordField.setEchoChar('\u2022');  // Cambiar a modo de contraseña
+                }
+            }
+
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                if (String.valueOf(passwordField.getPassword()).isEmpty()) {
+                    passwordField.setForeground(Color.GRAY);
+                    passwordField.setText(placeholder);
+                    passwordField.setEchoChar((char) 0);  // Mostrar texto por defecto
+                }
+            }
+        });
     }
 
     private ImageIcon resizeImage(String imagePath, int width, int height) {
@@ -221,7 +220,11 @@ public class RegisterFrame extends JFrame {
 
                 Locale currentLocale = new Locale.Builder().setLanguage("en").setRegion("GB").build();
                 ResourceBundle bundle_text = ResourceBundle.getBundle("Bundle", currentLocale);
-                new RegisterFrame(bundle_text);
+                ArrayList<String> roomNames = new ArrayList<>();
+                for (int i = 0; i < 4; i++) {
+                    roomNames.add("+");
+                }
+                new RegisterFrame(bundle_text, roomNames);
             }
         });
     }

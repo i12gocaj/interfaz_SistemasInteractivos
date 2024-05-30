@@ -12,16 +12,21 @@ import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.ArrayList;
 
-public class RoomFrame extends JFrame{
+public class RoomFrame extends JFrame {
 
-    public RoomFrame(ResourceBundle bundle_text, String[] places, List<String[]> objectConfigurations, String currentObject) {
-        super("");
+    public RoomFrame(ResourceBundle bundle_text, ArrayList<String> roomNames, List<String[]> objectConfigurations, String currentObject) {
+        super(currentObject);  // Usar el nombre de la habitación como título
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(320, 500);
         Color backgroundColor = Color.decode("#E8FAFF");
         getContentPane().setBackground(backgroundColor);
 
-        this.setTitle(bundle_text.getString("Titulo_Room"));
+        // Actualizar el título de la ventana
+        if (currentObject != null && !currentObject.isEmpty()) {
+            this.setTitle(bundle_text.getString("Titulo_Room") + ": " + currentObject);
+        } else {
+            this.setTitle(bundle_text.getString("Titulo_Room"));
+        }
 
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new BorderLayout());
@@ -35,7 +40,7 @@ public class RoomFrame extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                new HomeFrame(bundle_text, places);
+                new HomeFrame(bundle_text, roomNames);
             }
         });
         topPanel.add(iconButton, BorderLayout.WEST);
@@ -47,7 +52,7 @@ public class RoomFrame extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                new SettingsFrame(bundle_text);
+                new SettingsFrame(bundle_text, roomNames);
             }
         });
         configureButton.setOpaque(false);
@@ -71,10 +76,8 @@ public class RoomFrame extends JFrame{
         JLabel roomLabel = new JLabel(bundle_text.getString("Configuration"));
         roomLabel.setFont(new Font("Arial", Font.BOLD, 24));
 
-
         JLabel objectsLabel = new JLabel(bundle_text.getString("Objects"));
         objectsLabel.setFont(new Font("Arial", Font.BOLD, 24));
-
 
         JLabel addGadgetLabel = new JLabel(bundle_text.getString("Add_Gadget"));
         addGadgetLabel.setFont(new Font("Arial", Font.BOLD, 24));
@@ -83,19 +86,21 @@ public class RoomFrame extends JFrame{
         JPanel roomPanel = new JPanel(new GridBagLayout());
 
         List<String[]> actualObjectConfigurations = new ArrayList<>();
-        for(int i = 0; i < objectConfigurations.size(); i++){
-            String[] objectConfiguration = objectConfigurations.get(i);
-            if(objectConfiguration[0] == currentObject){
-                actualObjectConfigurations.add(objectConfiguration);
+        if (objectConfigurations != null) {
+            for (int i = 0; i < objectConfigurations.size(); i++) {
+                String[] objectConfiguration = objectConfigurations.get(i);
+                if (objectConfiguration[0].equals(currentObject)) {
+                    actualObjectConfigurations.add(objectConfiguration);
+                }
             }
         }
 
-        for(int i = 0; i < actualObjectConfigurations.size(); i++){
+        for (int i = 0; i < actualObjectConfigurations.size(); i++) {
             String[] objectConfiguration = actualObjectConfigurations.get(i);
             String type = type(objectConfiguration);
             JLabel label = new JLabel(objectConfiguration[1]);
 
-            if(type == "Switch"){
+            if (type.equals("Switch")) {
                 ImageIcon switchIconOn = resizeImage("interfaz/iconos/switch_on.png", 40, 30);
                 ImageIcon switchIconOff = resizeImage("interfaz/iconos/switch_off.png", 40, 30);
 
@@ -121,7 +126,7 @@ public class RoomFrame extends JFrame{
                 gbc.insets = new Insets(0, 0, 10, 0);
                 roomPanel.add(Switch, gbc);
 
-            }else if(type == "Slider"){
+            } else if (type.equals("Slider")) {
                 JSlider brightnessSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 50);
                 brightnessSlider.setPreferredSize(new Dimension(100, brightnessSlider.getPreferredSize().height));
                 brightnessSlider.setUI(new javax.swing.plaf.metal.MetalSliderUI() {
@@ -153,9 +158,9 @@ public class RoomFrame extends JFrame{
                 gbc.gridy = i;
                 gbc.insets = new Insets(0, 0, 10, 0);
                 roomPanel.add(brightnessSlider, gbc);
-            }else{
+            } else {
                 JComboBox<String> comboBox = new JComboBox<>();
-                for(int j = 2; j < objectConfiguration.length; j++){
+                for (int j = 2; j < objectConfiguration.length; j++) {
                     comboBox.addItem(objectConfiguration[j]);
                 }
                 gbc.gridx = 0;
@@ -168,21 +173,22 @@ public class RoomFrame extends JFrame{
                 gbc.insets = new Insets(0, 0, 10, 0);
                 roomPanel.add(comboBox, gbc);
             }
-
         }
 
         // Gadget selector
         String[] allGadgets = {};
-        for(int i = 0; i < objectConfigurations.size(); i++){
-            String[] objectConfiguration = objectConfigurations.get(i);
-            if(!java.util.Arrays.asList(allGadgets).contains(objectConfiguration[0])){
-                allGadgets = java.util.Arrays.copyOf(allGadgets, allGadgets.length + 1);
-                allGadgets[allGadgets.length - 1] = objectConfiguration[0];
+        if (objectConfigurations != null) {
+            for (int i = 0; i < objectConfigurations.size(); i++) {
+                String[] objectConfiguration = objectConfigurations.get(i);
+                if (!java.util.Arrays.asList(allGadgets).contains(objectConfiguration[0])) {
+                    allGadgets = java.util.Arrays.copyOf(allGadgets, allGadgets.length + 1);
+                    allGadgets[allGadgets.length - 1] = objectConfiguration[0];
+                }
             }
         }
 
         JComboBox<String> gadgetSelector = new JComboBox<>();
-        for(int i = 0; i < allGadgets.length; i++){
+        for (int i = 0; i < allGadgets.length; i++) {
             gadgetSelector.addItem(allGadgets[i]);
         }
         gadgetSelector.setSelectedItem(currentObject);
@@ -191,11 +197,9 @@ public class RoomFrame extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                new RoomFrame(bundle_text, places, objectConfigurations, (String)gadgetSelector.getSelectedItem());
+                new RoomFrame(bundle_text, roomNames, objectConfigurations, (String) gadgetSelector.getSelectedItem());
             }
         });
-
-
 
         // Add components to the main panel
         gbc.gridx = 0;
@@ -253,8 +257,8 @@ public class RoomFrame extends JFrame{
         button.setBorder(null);  // Eliminar el borde
     }
 
-    private String type(String[] objectConfigurations){
-        switch (objectConfigurations[2]){
+    private String type(String[] objectConfigurations) {
+        switch (objectConfigurations[2]) {
             case "Switch":
                 return "Switch";
             case "Slider":
@@ -270,20 +274,23 @@ public class RoomFrame extends JFrame{
             public void run() {
                 Locale currentLocale = new Locale.Builder().setLanguage("en").setRegion("GB").build();
                 ResourceBundle bundle_text = ResourceBundle.getBundle("Bundle", currentLocale);
-                String[] places = { "+", "+", "+", "+" };
+                ArrayList<String> roomNames = new ArrayList<>();
+                for (int i = 0; i < 4; i++) {
+                    roomNames.add("+");
+                }
 
                 List<String[]> objectConfigurations = new ArrayList<>();
-                objectConfigurations.add(new String[]{"Air conditioner", "Start","Switch"});
+                objectConfigurations.add(new String[]{"Air conditioner", "Start", "Switch"});
                 objectConfigurations.add(new String[]{"Air conditioner", "Fan", "Low", "Medium", "High"});
-                objectConfigurations.add(new String[]{"Lights", "Living room","Switch"});
-                objectConfigurations.add(new String[]{"Lights", "Kitchen","Switch"});
-                objectConfigurations.add(new String[]{"Lights", "Type","Static","Dynamic"});
-                objectConfigurations.add(new String[]{"Lights", "Color","Red","Green","Blue"});
-                objectConfigurations.add(new String[]{"Lights", "Brightness","Slider"});
+                objectConfigurations.add(new String[]{"Lights", "Living room", "Switch"});
+                objectConfigurations.add(new String[]{"Lights", "Kitchen", "Switch"});
+                objectConfigurations.add(new String[]{"Lights", "Type", "Static", "Dynamic"});
+                objectConfigurations.add(new String[]{"Lights", "Color", "Red", "Green", "Blue"});
+                objectConfigurations.add(new String[]{"Lights", "Brightness", "Slider"});
 
                 String currentObject = "Lights";
 
-                new RoomFrame(bundle_text, places, objectConfigurations, currentObject);
+                new RoomFrame(bundle_text, roomNames, objectConfigurations, currentObject);
             }
         });
     }
