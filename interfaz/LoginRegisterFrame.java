@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import java.awt.event.ActionEvent;
@@ -36,7 +37,7 @@ class RoundedButton extends JButton {
 public class LoginRegisterFrame extends JFrame {
 
     // Constructor de la clase
-    public LoginRegisterFrame() {
+    public LoginRegisterFrame(ArrayList<String> roomNames) {
         // Llamamos al constructor de la superclase JFrame y establecemos el título de la ventana
         super("");
 
@@ -76,12 +77,11 @@ public class LoginRegisterFrame extends JFrame {
         RoundedButton btnRegister = new RoundedButton(resizeImage("interfaz/iconos/register.png", 120, 60));
 
         // Añadimos action listener para cambiar a las otras paginas
-
         btnLogin.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                new LoginFrame(bundle_text);
+                new LoginFrame(bundle_text, roomNames);
             }
         });
 
@@ -89,10 +89,9 @@ public class LoginRegisterFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                new RegisterFrame(bundle_text);
+                new RegisterFrame(bundle_text, roomNames);
             }
         });
-
 
         // Posicionamos el botón de inicio de sesión debajo del icono
         gbc.gridy = 1;
@@ -131,11 +130,21 @@ public class LoginRegisterFrame extends JFrame {
 
     // Método main para ejecutar la aplicación
     public static void main(String[] args) {
-        // Aseguramos que la UI se inicie en el Event Dispatch Thread
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new LoginRegisterFrame();
+                try {
+                    UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                ArrayList<String> roomNames = new ArrayList<>();
+                for (int i = 0; i < 4; i++) {
+                    roomNames.add("+");
+                }
+                
+                new LoginRegisterFrame(roomNames);
             }
         });
     }

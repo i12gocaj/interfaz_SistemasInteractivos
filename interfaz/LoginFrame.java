@@ -1,15 +1,17 @@
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
-
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
-import javax.swing.border.Border;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 // Clase para botones redondeados
 class RoundedButton extends JButton {
@@ -36,14 +38,12 @@ class RoundedButton extends JButton {
 
 public class LoginFrame extends JFrame {
 
-    public LoginFrame(ResourceBundle bundle_text) {
+    public LoginFrame(ResourceBundle bundle_text, ArrayList<String> roomNames) {
         super("");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(320, 500);
         Color backgroundColor = Color.decode("#E8FAFF");
         getContentPane().setBackground(backgroundColor);
-
-        
 
         this.setTitle(bundle_text.getString("Titulo_Login"));
 
@@ -53,6 +53,14 @@ public class LoginFrame extends JFrame {
 
         ImageIcon icon = resizeImage("interfaz/iconos/logo.png", 60, 60);
         JLabel iconLabel = new JLabel(icon);
+        iconLabel.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Cambiar cursor para indicar que es clicable
+        iconLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                dispose();
+                new LoginRegisterFrame(roomNames);
+            }
+        });
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -71,8 +79,6 @@ public class LoginFrame extends JFrame {
         panel.add(errorMessageLabel, gbc);
         errorMessageLabel.setVisible(false);
 
-
-
         Border boldBorder = BorderFactory.createLineBorder(Color.BLACK, 1);
 
         JTextField emailField = new JTextField(bundle_text.getString("Email"));
@@ -88,6 +94,7 @@ public class LoginFrame extends JFrame {
                     emailField.setForeground(Color.BLACK);
                 }
             }
+
             public void focusLost(java.awt.event.FocusEvent evt) {
                 if (emailField.getText().isEmpty()) {
                     emailField.setForeground(Color.GRAY);
@@ -96,23 +103,27 @@ public class LoginFrame extends JFrame {
             }
         });
 
-        JTextField passwordField = new JPasswordField(bundle_text.getString("Password"));
+        JPasswordField passwordField = new JPasswordField(bundle_text.getString("Password"));
         passwordField.setForeground(Color.GRAY);
         passwordField.setHorizontalAlignment(JTextField.CENTER);
         passwordField.setFont(new Font("Arial", Font.PLAIN, 12));
         passwordField.setPreferredSize(new Dimension(180, 30));
         passwordField.setBorder(boldBorder);
+        passwordField.setEchoChar((char) 0);  // Mostrar texto por defecto
         passwordField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
-                if (passwordField.getText().equals(bundle_text.getString("Password"))) {
+                if (String.valueOf(passwordField.getPassword()).equals(bundle_text.getString("Password"))) {
                     passwordField.setText("");
                     passwordField.setForeground(Color.BLACK);
+                    passwordField.setEchoChar('\u2022');  // Cambiar a modo de contraseña
                 }
             }
+
             public void focusLost(java.awt.event.FocusEvent evt) {
-                if (passwordField.getText().isEmpty()) {
+                if (String.valueOf(passwordField.getPassword()).isEmpty()) {
                     passwordField.setForeground(Color.GRAY);
                     passwordField.setText(bundle_text.getString("Password"));
+                    passwordField.setEchoChar((char) 0);  // Mostrar texto por defecto
                 }
             }
         });
@@ -133,26 +144,26 @@ public class LoginFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String email = emailField.getText();
-                String password = passwordField.getText();
-                
+                String password = String.valueOf(passwordField.getPassword());
+
                 // Verificar si algún campo está vacío
                 if (email.isEmpty() || password.isEmpty()) {
+                    errorMessageLabel.setText(bundle_text.getString("Fields_Cannot_Be_Empty"));
                     errorMessageLabel.setVisible(true); // Mostrar el mensaje de error
-                } // Mostrar el mensaje de error  
-                else {
+                    hideErrorMessageAfterDelay(errorMessageLabel, 3000);
+                } else {
                     // Verificar si se ingresaron los textos predeterminados
                     if (email.equals("hola") && password.equals("hola")) {
                         dispose(); // Cerrar el marco de inicio de sesión
-                        String[] places = { "+", "+", "+", "+" };
-                        new HomeFrame(bundle_text, places); // Abrir la nueva pantalla
+                        new HomeFrame(bundle_text, roomNames); // Abrir la nueva pantalla
                     } else {
-                       
+                        errorMessageLabel.setText(bundle_text.getString("Wrong_Username_Password"));
                         errorMessageLabel.setVisible(true); // Mostrar el mensaje de error
+                        hideErrorMessageAfterDelay(errorMessageLabel, 3000);
                     }
                 }
             }
         });
-
 
         gbc.gridy = 3;
         gbc.gridwidth = 1;
@@ -176,13 +187,34 @@ public class LoginFrame extends JFrame {
         }
     }
 
+    private void hideErrorMessageAfterDelay(JLabel label, int delay) {
+        Timer timer = new Timer(delay, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                label.setVisible(false);
+            }
+        });
+        timer.setRepeats(false); // Ensure the timer only runs once
+        timer.start();
+    }
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
+                try {
+                    UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
                 Locale currentLocale = new Locale.Builder().setLanguage("en").setRegion("GB").build();
                 ResourceBundle bundle_text = ResourceBundle.getBundle("Bundle", currentLocale);
-                new LoginFrame(bundle_text);
+                ArrayList<String> roomNames = new ArrayList<>();
+                for (int i = 0; i < 4; i++) {
+                    roomNames.add("+");
+                }
+                new LoginFrame(bundle_text, roomNames);
             }
         });
     }
