@@ -96,9 +96,31 @@ public class HomeFrame extends JFrame {
             mainPanel.add(button, gbc);
         }
 
+        JPanel bottomPanel = new JPanel();
+        bottomPanel.setBackground(Color.decode("#E8FAFF"));
+        
+        ImageIcon valoration = resizeImage("interfaz/iconos/valoration.png", 30, 30);
+        JButton valorationButton = new JButton(valoration);
+        valorationButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            dispose();
+            new ValorationFrame(bundle_text, roomNames, objectConfigurations);
+            }
+        });
+
+        valorationButton.setOpaque(false);
+        valorationButton.setContentAreaFilled(false);
+        valorationButton.setBorderPainted(false);
+        valorationButton.setFocusPainted(false);
+        valorationButton.setBorder(null);
+
+        bottomPanel.add(valorationButton, BorderLayout.WEST);
+
         // Añade paneles al JFrame
         add(topPanel, BorderLayout.NORTH);
         add(mainPanel, BorderLayout.CENTER);
+        add(bottomPanel, BorderLayout.SOUTH);
 
         setResizable(false);
         setLocationRelativeTo(null);
