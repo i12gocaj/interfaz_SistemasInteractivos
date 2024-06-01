@@ -183,7 +183,7 @@ public class RoomFrame extends JFrame {
         if (objectConfigurations != null) {
             for (int i = 0; i < objectConfigurations.size(); i++) {
                 String[] objectConfiguration = objectConfigurations.get(i);
-                if (!java.util.Arrays.asList(allGadgets).contains(objectConfiguration[1])) {
+                if (!java.util.Arrays.asList(allGadgets).contains(objectConfiguration[1]) && Integer.parseInt(objectConfiguration[0]) == roomNumber) {
                     allGadgets = java.util.Arrays.copyOf(allGadgets, allGadgets.length + 1);
                     allGadgets[allGadgets.length - 1] = objectConfiguration[1];
                 }

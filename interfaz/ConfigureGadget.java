@@ -272,13 +272,13 @@ public class ConfigureGadget extends JFrame {
         int random = (int) (Math.random() * 3) + 1;
         switch (random) {
             case 1:
-                randomPlace = "Living Room";
+                randomPlace = "Next to the door";
                 break;
             case 2:
-                randomPlace = "Kitchen";
+                randomPlace = "Next to the window";
                 break;
             case 3:
-                randomPlace = "Bedroom";
+                randomPlace = "Middle";
                 break;
         }
 
