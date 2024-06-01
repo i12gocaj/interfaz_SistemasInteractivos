@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.ArrayList;
+import java.util.List;
 import javax.imageio.ImageIO;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -38,7 +39,7 @@ class RoundedButton extends JButton {
 
 public class RegisterFrame extends JFrame {
 
-    public RegisterFrame(ResourceBundle bundle_text, ArrayList<String> roomNames) {
+    public RegisterFrame(ResourceBundle bundle_text, ArrayList<String> roomNames, List<String[]> objectConfigurations) {
         super("");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(320, 500);
@@ -149,7 +150,7 @@ public class RegisterFrame extends JFrame {
                     // Passwords match and all fields are filled
                     errorMessageLabel.setVisible(false);
                     dispose(); // Cerrar el marco de registro
-                    new HomeFrame(bundle_text, roomNames); // Abrir la nueva pantalla
+                    new HomeFrame(bundle_text, roomNames, objectConfigurations); // Abrir la nueva pantalla
                 }
             }
         });
@@ -224,7 +225,8 @@ public class RegisterFrame extends JFrame {
                 for (int i = 0; i < 4; i++) {
                     roomNames.add("+");
                 }
-                new RegisterFrame(bundle_text, roomNames);
+                List<String[]> objectConfigurations = new ArrayList<>();
+                new RegisterFrame(bundle_text, roomNames, objectConfigurations);
             }
         });
     }

@@ -6,13 +6,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.List;
 import javax.imageio.ImageIO;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class HomeFrame extends JFrame {
 
-    public HomeFrame(ResourceBundle bundle_text, ArrayList<String> roomNames) {
+    public HomeFrame(ResourceBundle bundle_text, ArrayList<String> roomNames, List<String[]> objectConfigurations) {
         super("");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(320, 500);
@@ -35,7 +36,7 @@ public class HomeFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                new SettingsFrame(bundle_text, roomNames);
+                new SettingsFrame(bundle_text, roomNames, objectConfigurations);
             }
         });
         configureButton.setOpaque(false);
@@ -70,17 +71,23 @@ public class HomeFrame extends JFrame {
             JButton button = new JButton(roomNames.get(i), rectangleIcon);
             adjustFontSizeToFit(button);
             configureButton(button);
+            final int index = i;
             button.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     JButton sourceButton = (JButton) e.getSource();
                     if (sourceButton.getText().equals("+")) {
                         dispose();
-                        new ConfigureRoom(bundle_text, roomNames);
+                        new ConfigureRoom(bundle_text, roomNames, objectConfigurations);
                     } else {
                         dispose();
                         // Aquí se pasa el nombre de la habitación al constructor de RoomFrame
-                        new RoomFrame(bundle_text, roomNames, null, sourceButton.getText());
+                        if(objectConfigurations.isEmpty()){
+                            new ConfigureGadget(bundle_text, roomNames, objectConfigurations, index);
+                        }else{
+                            String currentObject = objectConfigurations.get(0)[1];
+                            new RoomFrame(bundle_text, roomNames, objectConfigurations, currentObject, index);
+                        }
                     }
                 }
             });
@@ -156,7 +163,8 @@ public class HomeFrame extends JFrame {
                 for (int i = 0; i < 4; i++) {
                     roomNames.add("+");
                 }
-                new HomeFrame(bundle_text, roomNames);
+                List<String[]> objectConfigurations = new ArrayList<>();
+                new HomeFrame(bundle_text, roomNames, objectConfigurations);
             }
         });
     }

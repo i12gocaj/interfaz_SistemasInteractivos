@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.List;
 import javax.imageio.ImageIO;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,7 +15,7 @@ import java.awt.event.ActionListener;
 public class SettingsFrame extends JFrame {
     private JLabel errorMessageLabel;
 
-    public SettingsFrame(ResourceBundle bundle_text, ArrayList<String> roomNames) {
+    public SettingsFrame(ResourceBundle bundle_text, ArrayList<String> roomNames, List<String[]> objectConfigurations) {
         super("");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(320, 500);
@@ -37,7 +38,7 @@ public class SettingsFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                new HomeFrame(bundle_text, roomNames);
+                new HomeFrame(bundle_text, roomNames, objectConfigurations);
             }
         });
         topPanel.add(iconButton, BorderLayout.WEST);
@@ -108,10 +109,12 @@ public class SettingsFrame extends JFrame {
         });
         gbc.gridx = 2;
         gbc.gridy = 0;
+        gbc.gridwidth = 2;
         gbc.insets = new Insets(20, 10, 5, 0);
         middlePanel.add(notificationsSwitch, gbc);
 
         JSlider brightnessSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 50);
+        brightnessSlider.setPreferredSize(new Dimension(100, brightnessSlider.getPreferredSize().height));
         brightnessSlider.setUI(new javax.swing.plaf.metal.MetalSliderUI() {
             public void paintTrack(Graphics g) {
                 Graphics2D g2d = (Graphics2D) g;
@@ -133,6 +136,7 @@ public class SettingsFrame extends JFrame {
         brightnessSlider.setMinorTickSpacing(1);
         gbc.gridx = 2;
         gbc.gridy = 1;
+        gbc.gridwidth = 2;
         gbc.insets = new Insets(20, 10, 5, 0);
         middlePanel.add(brightnessSlider, gbc);
 
@@ -148,7 +152,7 @@ public class SettingsFrame extends JFrame {
                 Locale currentLocale = new Locale.Builder().setLanguage("en").setRegion("GB").build();
                 ResourceBundle bundle_text = ResourceBundle.getBundle("Bundle", currentLocale);
                 dispose();
-                new SettingsFrame(bundle_text, roomNames);
+                new SettingsFrame(bundle_text, roomNames, objectConfigurations);
             }
         });
         gbc.gridx = 0;
@@ -165,7 +169,7 @@ public class SettingsFrame extends JFrame {
                 Locale currentLocale = new Locale.Builder().setLanguage("es").setRegion("ES").build();
                 ResourceBundle bundle_text = ResourceBundle.getBundle("Bundle", currentLocale);
                 dispose();
-                new SettingsFrame(bundle_text, roomNames);
+                new SettingsFrame(bundle_text, roomNames, objectConfigurations);
             }
         });
         gbc.gridx = 1;  // Cambiar la posición para evitar que el botón esté fuera de los límites
@@ -242,7 +246,7 @@ public class SettingsFrame extends JFrame {
                     // Passwords match and all fields are filled
                     errorMessageLabel.setVisible(false);
                     dispose(); // Cerrar el marco de inicio de sesión
-                    new HomeFrame(bundle_text, roomNames); // Abrir la nueva pantalla
+                    new HomeFrame(bundle_text, roomNames, objectConfigurations); // Abrir la nueva pantalla
                 }
             }
         });
@@ -349,7 +353,8 @@ public class SettingsFrame extends JFrame {
                 for (int i = 0; i < 4; i++) {
                     roomNames.add("+");
                 }
-                new SettingsFrame(bundle_text, roomNames);
+                List<String[]> objectConfigurations = new ArrayList<>();
+                new SettingsFrame(bundle_text, roomNames, objectConfigurations);
             }
         });
     }

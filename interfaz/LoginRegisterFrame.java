@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 // Clase para botones redondeados
 class RoundedButton extends JButton {
@@ -81,7 +82,8 @@ public class LoginRegisterFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                new LoginFrame(bundle_text, roomNames);
+                List<String[]> objectConfigurations = new ArrayList<>();
+                new LoginFrame(bundle_text, roomNames, objectConfigurations);
             }
         });
 
@@ -89,7 +91,8 @@ public class LoginRegisterFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                new RegisterFrame(bundle_text, roomNames);
+                List<String[]> objectConfigurations = new ArrayList<>();
+                new RegisterFrame(bundle_text, roomNames, objectConfigurations);
             }
         });
 

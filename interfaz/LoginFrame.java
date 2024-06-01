@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.ArrayList;
+import java.util.List;
 import javax.imageio.ImageIO;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -38,7 +39,7 @@ class RoundedButton extends JButton {
 
 public class LoginFrame extends JFrame {
 
-    public LoginFrame(ResourceBundle bundle_text, ArrayList<String> roomNames) {
+    public LoginFrame(ResourceBundle bundle_text, ArrayList<String> roomNames, List<String[]> objectConfigurations) {
         super("");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(320, 500);
@@ -155,7 +156,7 @@ public class LoginFrame extends JFrame {
                     // Verificar si se ingresaron los textos predeterminados
                     if (email.equals("hola") && password.equals("hola")) {
                         dispose(); // Cerrar el marco de inicio de sesión
-                        new HomeFrame(bundle_text, roomNames); // Abrir la nueva pantalla
+                        new HomeFrame(bundle_text, roomNames, objectConfigurations); // Abrir la nueva pantalla
                     } else {
                         errorMessageLabel.setText(bundle_text.getString("Wrong_Username_Password"));
                         errorMessageLabel.setVisible(true); // Mostrar el mensaje de error
@@ -214,7 +215,9 @@ public class LoginFrame extends JFrame {
                 for (int i = 0; i < 4; i++) {
                     roomNames.add("+");
                 }
-                new LoginFrame(bundle_text, roomNames);
+
+                List<String[]> objectConfigurations = new ArrayList<>();
+                new LoginFrame(bundle_text, roomNames, objectConfigurations);
             }
         });
     }

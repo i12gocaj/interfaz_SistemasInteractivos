@@ -10,13 +10,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.List;
 import javax.imageio.ImageIO;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class ConfigureRoom extends JFrame {
 
-    public ConfigureRoom(ResourceBundle bundle_text, ArrayList<String> roomNames) {
+    public ConfigureRoom(ResourceBundle bundle_text, ArrayList<String> roomNames, List<String[]> objectConfigurations) {
         super("");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(320, 500);
@@ -41,7 +42,7 @@ public class ConfigureRoom extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                new HomeFrame(bundle_text, roomNames);
+                new HomeFrame(bundle_text, roomNames, objectConfigurations);
             }
         });
         topPanel.add(homeButton, BorderLayout.WEST);
@@ -56,7 +57,7 @@ public class ConfigureRoom extends JFrame {
         configureButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new SettingsFrame(bundle_text, roomNames);
+                new SettingsFrame(bundle_text, roomNames, objectConfigurations);
             }
         });
         topPanel.add(configureButton, BorderLayout.EAST);
@@ -134,7 +135,7 @@ public class ConfigureRoom extends JFrame {
                     roomNames.set(roomNames.indexOf("+"), roomName);
                 }
                 dispose();
-                new HomeFrame(bundle_text, roomNames);
+                new HomeFrame(bundle_text, roomNames, objectConfigurations);
             }
         });
         addButton.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -174,7 +175,8 @@ public class ConfigureRoom extends JFrame {
                 for (int i = 0; i < 4; i++) {
                     roomNames.add("+");
                 }
-                new ConfigureRoom(bundle_text, roomNames);
+                List<String[]> objectConfigurations = new ArrayList<>();
+                new ConfigureRoom(bundle_text, roomNames, objectConfigurations);
             }
         });
     }

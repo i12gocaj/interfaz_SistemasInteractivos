@@ -14,16 +14,16 @@ import java.util.ArrayList;
 
 public class RoomFrame extends JFrame {
 
-    public RoomFrame(ResourceBundle bundle_text, ArrayList<String> roomNames, List<String[]> objectConfigurations, String currentObject) {
-        super(currentObject);  // Usar el nombre de la habitación como título
+    public RoomFrame(ResourceBundle bundle_text, ArrayList<String> roomNames, List<String[]> objectConfigurations, String currentObject, Integer roomNumber) {
+        super(roomNames.get(roomNumber));  // Usar el nombre de la habitación como título
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(320, 500);
         Color backgroundColor = Color.decode("#E8FAFF");
         getContentPane().setBackground(backgroundColor);
 
         // Actualizar el título de la ventana
-        if (currentObject != null && !currentObject.isEmpty()) {
-            this.setTitle(bundle_text.getString("Titulo_Room") + ": " + currentObject);
+        if (roomNames.get(roomNumber) != null && !roomNames.get(roomNumber).isEmpty()) {
+            this.setTitle(bundle_text.getString("Titulo_Room") + ": " + roomNames.get(roomNumber));
         } else {
             this.setTitle(bundle_text.getString("Titulo_Room"));
         }
@@ -40,7 +40,7 @@ public class RoomFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                new HomeFrame(bundle_text, roomNames);
+                new HomeFrame(bundle_text, roomNames, objectConfigurations);
             }
         });
         topPanel.add(iconButton, BorderLayout.WEST);
@@ -52,7 +52,7 @@ public class RoomFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                new SettingsFrame(bundle_text, roomNames);
+                new SettingsFrame(bundle_text, roomNames, objectConfigurations);
             }
         });
         configureButton.setOpaque(false);
@@ -89,7 +89,7 @@ public class RoomFrame extends JFrame {
         if (objectConfigurations != null) {
             for (int i = 0; i < objectConfigurations.size(); i++) {
                 String[] objectConfiguration = objectConfigurations.get(i);
-                if (objectConfiguration[0].equals(currentObject)) {
+                if (objectConfiguration[1].equals(currentObject)) {
                     actualObjectConfigurations.add(objectConfiguration);
                 }
             }
@@ -98,7 +98,10 @@ public class RoomFrame extends JFrame {
         for (int i = 0; i < actualObjectConfigurations.size(); i++) {
             String[] objectConfiguration = actualObjectConfigurations.get(i);
             String type = type(objectConfiguration);
-            JLabel label = new JLabel(objectConfiguration[1]);
+            if(Integer.parseInt(objectConfiguration[0]) != roomNumber) {
+                continue;
+            }
+            JLabel label = new JLabel(objectConfiguration[2]);
 
             if (type.equals("Switch")) {
                 ImageIcon switchIconOn = resizeImage("interfaz/iconos/switch_on.png", 40, 30);
@@ -160,7 +163,7 @@ public class RoomFrame extends JFrame {
                 roomPanel.add(brightnessSlider, gbc);
             } else {
                 JComboBox<String> comboBox = new JComboBox<>();
-                for (int j = 2; j < objectConfiguration.length; j++) {
+                for (int j = 3; j < objectConfiguration.length; j++) {
                     comboBox.addItem(objectConfiguration[j]);
                 }
                 gbc.gridx = 0;
@@ -180,9 +183,9 @@ public class RoomFrame extends JFrame {
         if (objectConfigurations != null) {
             for (int i = 0; i < objectConfigurations.size(); i++) {
                 String[] objectConfiguration = objectConfigurations.get(i);
-                if (!java.util.Arrays.asList(allGadgets).contains(objectConfiguration[0])) {
+                if (!java.util.Arrays.asList(allGadgets).contains(objectConfiguration[1])) {
                     allGadgets = java.util.Arrays.copyOf(allGadgets, allGadgets.length + 1);
-                    allGadgets[allGadgets.length - 1] = objectConfiguration[0];
+                    allGadgets[allGadgets.length - 1] = objectConfiguration[1];
                 }
             }
         }
@@ -197,7 +200,18 @@ public class RoomFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                new RoomFrame(bundle_text, roomNames, objectConfigurations, (String) gadgetSelector.getSelectedItem());
+                new RoomFrame(bundle_text, roomNames, objectConfigurations, (String) gadgetSelector.getSelectedItem(), roomNumber);
+            }
+        });
+
+        ImageIcon addIcon = resizeImage("interfaz/iconos/big_plus.png", 30, 30);
+        JButton addButton = new JButton(addIcon);
+        configureButton(addButton);
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                new ConfigureGadget(bundle_text, roomNames, objectConfigurations, roomNumber);
             }
         });
 
@@ -226,6 +240,11 @@ public class RoomFrame extends JFrame {
         gbc.gridy = 4;
         gbc.insets = new Insets(0, 0, 10, 0);
         mainPanel.add(addGadgetLabel, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 5;
+        gbc.insets = new Insets(0, 0, 10, 0);
+        mainPanel.add(addButton, gbc);
 
         add(mainPanel, BorderLayout.CENTER);
 
@@ -258,7 +277,7 @@ public class RoomFrame extends JFrame {
     }
 
     private String type(String[] objectConfigurations) {
-        switch (objectConfigurations[2]) {
+        switch (objectConfigurations[3]) {
             case "Switch":
                 return "Switch";
             case "Slider":
@@ -280,17 +299,19 @@ public class RoomFrame extends JFrame {
                 }
 
                 List<String[]> objectConfigurations = new ArrayList<>();
-                objectConfigurations.add(new String[]{"Air conditioner", "Start", "Switch"});
-                objectConfigurations.add(new String[]{"Air conditioner", "Fan", "Low", "Medium", "High"});
-                objectConfigurations.add(new String[]{"Lights", "Living room", "Switch"});
-                objectConfigurations.add(new String[]{"Lights", "Kitchen", "Switch"});
-                objectConfigurations.add(new String[]{"Lights", "Type", "Static", "Dynamic"});
-                objectConfigurations.add(new String[]{"Lights", "Color", "Red", "Green", "Blue"});
-                objectConfigurations.add(new String[]{"Lights", "Brightness", "Slider"});
+                objectConfigurations.add(new String[]{"0", "Air conditioner", "Start", "Switch"});
+                objectConfigurations.add(new String[]{"0", "Air conditioner", "Fan", "Low", "Medium", "High"});
+                objectConfigurations.add(new String[]{"0", "Lights", "Living room", "Switch"});
+                objectConfigurations.add(new String[]{"0", "Lights", "Kitchen", "Switch"});
+                objectConfigurations.add(new String[]{"1", "Lights", "Type", "Static", "Dynamic"});
+                objectConfigurations.add(new String[]{"1", "Lights", "Color", "Red", "Green", "Blue"});
+                objectConfigurations.add(new String[]{"1", "Lights", "Brightness", "Slider"});
 
                 String currentObject = "Lights";
 
-                new RoomFrame(bundle_text, roomNames, objectConfigurations, currentObject);
+                Integer roomNumber = 0;
+
+                new RoomFrame(bundle_text, roomNames, objectConfigurations, currentObject, roomNumber);
             }
         });
     }
