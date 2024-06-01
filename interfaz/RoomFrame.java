@@ -251,7 +251,7 @@ public class RoomFrame extends JFrame {
             }
         });
 
-        JButton deleteRoom = new JButton(bundle_text.getString("Delete_Room"));
+        JButton deleteRoom = new JButton(bundle_text.getString("Delete"));
         deleteRoom.setFont(new Font("Arial", Font.PLAIN, 14));
         deleteRoom.setBackground(Color.LIGHT_GRAY);
         deleteRoom.setMaximumSize(new Dimension(140, 30));
@@ -260,7 +260,7 @@ public class RoomFrame extends JFrame {
         deleteRoom.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int result = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this room?", "Delete Room", JOptionPane.OK_CANCEL_OPTION);
+                int result = JOptionPane.showConfirmDialog(null, bundle_text.getString("Delete_Room"), bundle_text.getString("Titulo_Delete"), JOptionPane.OK_CANCEL_OPTION);
                 if (result == JOptionPane.OK_OPTION) {
                     roomNames.set(roomNumber, "+");
                     dispose();

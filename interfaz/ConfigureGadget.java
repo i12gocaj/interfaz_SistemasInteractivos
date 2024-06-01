@@ -144,7 +144,7 @@ public class ConfigureGadget extends JFrame {
         pairBluetoothButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Pairing complete, press Add");
+                JOptionPane.showMessageDialog(null, bundle_text.getString("Pairing_Complete_Press_Add"));
             }
         });
         pairBluetoothButton.setOpaque(false);
@@ -163,7 +163,7 @@ public class ConfigureGadget extends JFrame {
         pairWifiButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Pairing complete, press Add");
+                JOptionPane.showMessageDialog(null, bundle_text.getString("Pairing_Complete_Press_Add"));
             }
         });
         pairWifiButton.setOpaque(false);
@@ -188,7 +188,7 @@ public class ConfigureGadget extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String name = nameField.getText();
-                String place = randomPlace();
+                String place = randomPlace(bundle_text);
                 String type = randomType();
                 if(type.isBlank()){
                     type = randomCharacteristic();
@@ -266,19 +266,19 @@ public class ConfigureGadget extends JFrame {
         return randomType;
     }
 
-    private String randomPlace(){
+    private String randomPlace(ResourceBundle bundle_text){
         String randomPlace = "";
 
         int random = (int) (Math.random() * 3) + 1;
         switch (random) {
             case 1:
-                randomPlace = "Next to the door";
+                randomPlace = bundle_text.getString("Next_to_the_door");
                 break;
             case 2:
-                randomPlace = "Next to the window";
+                randomPlace = bundle_text.getString("Next to the window");
                 break;
             case 3:
-                randomPlace = "Middle";
+                randomPlace = bundle_text.getString("Middle");
                 break;
         }
 
