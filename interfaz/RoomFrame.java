@@ -178,6 +178,8 @@ public class RoomFrame extends JFrame {
             }
         }
 
+        JPanel gadgetPanel = new JPanel(new GridBagLayout());
+
         // Gadget selector
         String[] allGadgets = {};
         if (objectConfigurations != null) {
@@ -204,6 +206,40 @@ public class RoomFrame extends JFrame {
             }
         });
 
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(0, 0, 10, 0);
+        gadgetPanel.add(gadgetSelector, gbc);
+
+        JButton deleteButton = new JButton(bundle_text.getString("Delete"));
+        deleteButton.setFont(new Font("Arial", Font.PLAIN, 14));
+        deleteButton.setBackground(Color.LIGHT_GRAY);
+        deleteButton.setMaximumSize(new Dimension(80, 30));
+        deleteButton.setPreferredSize(new Dimension(80, 30));
+        deleteButton.setEnabled(true); // Puedes cambiar a false si quieres que el botón esté deshabilitado por defecto
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String finalCurrentObject = currentObject;
+                for (int i = 0; i < objectConfigurations.size(); i++) {
+                    String[] objectConfiguration = objectConfigurations.get(i);
+                    if (objectConfiguration[1].equals(currentObject) && Integer.parseInt(objectConfiguration[0]) == roomNumber) {
+                        objectConfigurations.remove(i);
+                        i--;
+                    }
+                    finalCurrentObject = (String) objectConfigurations.get(0)[1];
+                }
+                
+                dispose();
+                new RoomFrame(bundle_text, roomNames, objectConfigurations, finalCurrentObject, roomNumber);
+            }
+        });
+
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(0, 10, 10, 0);
+        gadgetPanel.add(deleteButton, gbc);
+
         ImageIcon addIcon = resizeImage("interfaz/iconos/big_plus.png", 30, 30);
         JButton addButton = new JButton(addIcon);
         configureButton(addButton);
@@ -214,6 +250,27 @@ public class RoomFrame extends JFrame {
                 new ConfigureGadget(bundle_text, roomNames, objectConfigurations, roomNumber);
             }
         });
+
+        JButton deleteRoom = new JButton(bundle_text.getString("Delete_Room"));
+        deleteRoom.setFont(new Font("Arial", Font.PLAIN, 14));
+        deleteRoom.setBackground(Color.LIGHT_GRAY);
+        deleteRoom.setMaximumSize(new Dimension(140, 30));
+        deleteRoom.setPreferredSize(new Dimension(140, 30));
+        deleteRoom.setEnabled(true); // Puedes cambiar a false si quieres que el botón esté deshabilitado por defecto
+        deleteRoom.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int result = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this room?", "Delete Room", JOptionPane.OK_CANCEL_OPTION);
+                if (result == JOptionPane.OK_OPTION) {
+                    roomNames.set(roomNumber, "+");
+                    dispose();
+                    new HomeFrame(bundle_text, roomNames, objectConfigurations);
+                } else {
+                    // Do nothing
+                }
+            }
+        });
+
 
         // Add components to the main panel
         gbc.gridx = 0;
@@ -234,7 +291,7 @@ public class RoomFrame extends JFrame {
         gbc.gridx = 0;
         gbc.gridy = 3;
         gbc.insets = new Insets(0, 0, 10, 0);
-        mainPanel.add(gadgetSelector, gbc);
+        mainPanel.add(gadgetPanel, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 4;
@@ -245,6 +302,11 @@ public class RoomFrame extends JFrame {
         gbc.gridy = 5;
         gbc.insets = new Insets(0, 0, 10, 0);
         mainPanel.add(addButton, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 6;
+        gbc.insets = new Insets(0, 0, 10, 0);
+        mainPanel.add(deleteRoom, gbc);
 
         add(mainPanel, BorderLayout.CENTER);
 
